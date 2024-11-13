@@ -48,4 +48,9 @@ for i in range(0,len(data)):
         temp_dictionary.update({j:data[i][j]})
     media_list.append(temp_dictionary)
 
+
+with open("filtered_data.json", "w") as outfile: 
+    json.dump(media_list, outfile, indent=3)
+
+
 print(media_list)

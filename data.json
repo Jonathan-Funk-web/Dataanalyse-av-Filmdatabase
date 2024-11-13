@@ -18,8 +18,28 @@
             "release_date": "2024-10-22",
             "title": "Venom: The Last Dance",
             "video": false,
-            "vote_average": 6.4,
-            "vote_count": 654
+            "vote_average": 6.387,
+            "vote_count": 658
+        },
+        {
+            "adult": false,
+            "backdrop_path": "/2fxnTXr8NwyTFkunkimJkGkhqfy.jpg",
+            "genre_ids": [
+                18,
+                28,
+                27
+            ],
+            "id": 1118031,
+            "original_language": "es",
+            "original_title": "Apocalipsis Z: el principio del fin",
+            "overview": "When a kind of rabies that transforms people into aggressive creatures spreads across the planet, Manel isolates himself at home with his cat, relying on his wits to survive; but soon they must go out in search of food, by land and by sea, dodging many dangers.",
+            "popularity": 2835.786,
+            "poster_path": "/wIGJnIFQlESkC2rLpfA8EDHqk4g.jpg",
+            "release_date": "2024-10-04",
+            "title": "Apocalypse Z: The Beginning of the End",
+            "video": false,
+            "vote_average": 6.8,
+            "vote_count": 387
         },
         {
             "adult": false,
@@ -39,27 +59,7 @@
             "title": "Terrifier 3",
             "video": false,
             "vote_average": 6.9,
-            "vote_count": 882
-        },
-        {
-            "adult": false,
-            "backdrop_path": "/2fxnTXr8NwyTFkunkimJkGkhqfy.jpg",
-            "genre_ids": [
-                18,
-                28,
-                27
-            ],
-            "id": 1118031,
-            "original_language": "es",
-            "original_title": "Apocalipsis Z: el principio del fin",
-            "overview": "When a kind of rabies that transforms people into aggressive creatures spreads across the planet, Manel isolates himself at home with his cat, relying on his wits to survive; but soon they must go out in search of food, by land and by sea, dodging many dangers.",
-            "popularity": 2835.786,
-            "poster_path": "/wIGJnIFQlESkC2rLpfA8EDHqk4g.jpg",
-            "release_date": "2024-10-04",
-            "title": "Apocalypse Z: The Beginning of the End",
-            "video": false,
-            "vote_average": 6.768,
-            "vote_count": 382
+            "vote_count": 886
         },
         {
             "adult": false,
@@ -78,8 +78,8 @@
             "release_date": "2024-09-12",
             "title": "The Wild Robot",
             "video": false,
-            "vote_average": 8.493,
-            "vote_count": 2715
+            "vote_average": 8.49,
+            "vote_count": 2722
         },
         {
             "adult": false,
@@ -99,7 +99,27 @@
             "title": "The Substance",
             "video": false,
             "vote_average": 7.3,
-            "vote_count": 1799
+            "vote_count": 1809
+        },
+        {
+            "adult": false,
+            "backdrop_path": "/dvBCdCohwWbsP5qAaglOXagDMtk.jpg",
+            "genre_ids": [
+                28,
+                35,
+                878
+            ],
+            "id": 533535,
+            "original_language": "en",
+            "original_title": "Deadpool & Wolverine",
+            "overview": "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
+            "popularity": 1974.511,
+            "poster_path": "/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
+            "release_date": "2024-07-24",
+            "title": "Deadpool & Wolverine",
+            "video": false,
+            "vote_average": 7.7,
+            "vote_count": 5222
         },
         {
             "adult": false,
@@ -120,27 +140,7 @@
             "title": "Transformers One",
             "video": false,
             "vote_average": 8.1,
-            "vote_count": 648
-        },
-        {
-            "adult": false,
-            "backdrop_path": "/dvBCdCohwWbsP5qAaglOXagDMtk.jpg",
-            "genre_ids": [
-                28,
-                35,
-                878
-            ],
-            "id": 533535,
-            "original_language": "en",
-            "original_title": "Deadpool & Wolverine",
-            "overview": "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
-            "popularity": 1974.511,
-            "poster_path": "/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
-            "release_date": "2024-07-24",
-            "title": "Deadpool & Wolverine",
-            "video": false,
-            "vote_average": 7.707,
-            "vote_count": 5211
+            "vote_count": 651
         },
         {
             "adult": false,
@@ -159,8 +159,8 @@
             "release_date": "2024-10-31",
             "title": "Red One",
             "video": false,
-            "vote_average": 6.8,
-            "vote_count": 82
+            "vote_average": 6.7,
+            "vote_count": 85
         },
         {
             "adult": false,
@@ -199,7 +199,7 @@
             "release_date": "2024-04-12",
             "title": "Arcadian",
             "video": false,
-            "vote_average": 6.048,
+            "vote_average": 6.0,
             "vote_count": 423
         },
         {
@@ -223,7 +223,7 @@
             "title": "The Count of Monte-Cristo",
             "video": false,
             "vote_average": 8.3,
-            "vote_count": 797
+            "vote_count": 798
         },
         {
             "adult": false,
@@ -242,8 +242,8 @@
             "release_date": "2024-10-01",
             "title": "Joker: Folie \u00e0 Deux",
             "video": false,
-            "vote_average": 5.631,
-            "vote_count": 1513
+            "vote_average": 5.6,
+            "vote_count": 1514
         },
         {
             "adult": false,
@@ -280,7 +280,7 @@
             "release_date": "2024-04-26",
             "title": "Cash Out",
             "video": false,
-            "vote_average": 6.154,
+            "vote_average": 6.2,
             "vote_count": 91
         },
         {
@@ -302,7 +302,7 @@
             "title": "Despicable Me 4",
             "video": false,
             "vote_average": 7.1,
-            "vote_count": 2137
+            "vote_count": 2138
         },
         {
             "adult": false,
@@ -347,25 +347,6 @@
         },
         {
             "adult": false,
-            "backdrop_path": "/1aOPPkXASkd2By3EKIw66Ilx5qF.jpg",
-            "genre_ids": [
-                28,
-                53
-            ],
-            "id": 1094974,
-            "original_language": "en",
-            "original_title": "Take Cover",
-            "overview": "A burned-out professional sniper finds himself trapped in an all-glass penthouse by a lethal competitor and must find a way to survive and escape with little to no cover between him and the killer.",
-            "popularity": 736.635,
-            "poster_path": "/xNLiMNyFzKTL9PVIEulG55Hei8j.jpg",
-            "release_date": "2024-10-04",
-            "title": "Take Cover",
-            "video": false,
-            "vote_average": 6.689,
-            "vote_count": 45
-        },
-        {
-            "adult": false,
             "backdrop_path": "/begseNUKhZcc05Bc1UggaX5GeES.jpg",
             "genre_ids": [
                 28,
@@ -404,9 +385,28 @@
             "title": "Inside Out 2",
             "video": false,
             "vote_average": 7.601,
-            "vote_count": 4681
+            "vote_count": 4683
+        },
+        {
+            "adult": false,
+            "backdrop_path": "/jT4KqFTrR2ofpUUwzKCIn4uYWXp.jpg",
+            "genre_ids": [
+                28,
+                53
+            ],
+            "id": 1331375,
+            "original_language": "en",
+            "original_title": "Dominique",
+            "overview": "Dominique, a well-trained assassin, flees from her troubled past in an attempt to begin a new life in South America. However, she soon finds herself in a town plagued with violence and corruption. Facing brutal attacks from the police and mafia, Dominique must decide whether to protect herself or an innocent family that has taken her in.",
+            "popularity": 631.492,
+            "poster_path": "/29uKScAbQuKsMEdAn12a6BmvFn7.jpg",
+            "release_date": "2024-10-11",
+            "title": "Dominique",
+            "video": false,
+            "vote_average": 7.2,
+            "vote_count": 34
         }
     ],
-    "total_pages": 47090,
-    "total_results": 941784
+    "total_pages": 47093,
+    "total_results": 941847
 }
