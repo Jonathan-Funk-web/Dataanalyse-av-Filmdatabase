@@ -3,6 +3,7 @@ from dotenv import load_dotenv, dotenv_values
 
 Get_new_data = True #If true, does a API request, if false uses data in data.json
 media_list = [] 
+adult_list = []
 
 if Get_new_data:
     load_dotenv() 
@@ -37,9 +38,14 @@ else:
 data = response_text["results"]
 
 for i in range(0,len(data)):
-    if data[i]["adult"]:
+    if data[i]["adult"]: #If the API fetch fails the filter somehow, it appends the adult movies here
         print("is adult")
-        media_list.append(data[i]["title"])
-    #print(data[i]["title"])
+        adult_list.append(data[i]["title"])
+        continue
+
+    temp_dictionary = {} #Adds the JSON data as dictionaries, think of it as making the json smaller
+    for j in ["genre_ids","id","original_language","title","vote_average","vote_count"]:
+        temp_dictionary.update({j:data[i][j]})
+    media_list.append(temp_dictionary)
 
 print(media_list)
