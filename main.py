@@ -1,9 +1,14 @@
-import os,requests,pydoc,json,sys
-from dotenv import load_dotenv, dotenv_values 
+import os,requests,json,sys
+import matplotlib.pyplot as plt
+from dotenv import load_dotenv 
 
-Get_new_data = True #If true, does a API request, if false uses data in data.json
+
+Get_new_data = False #If true, does a API request, if false uses data in data.json
 media_list = [] 
 adult_list = []
+data_wanted = ["genre_ids","id","original_language","title","vote_average","vote_count"]
+
+#TODO: Work on going through the pages for the api search. Use a loop and change the url with it
 
 if Get_new_data:
     load_dotenv() 
@@ -44,13 +49,13 @@ for i in range(0,len(data)):
         continue
 
     temp_dictionary = {} #Adds the JSON data as dictionaries, think of it as making the json smaller
-    for j in ["genre_ids","id","original_language","title","vote_average","vote_count"]:
+    for j in data_wanted:
         temp_dictionary.update({j:data[i][j]})
     media_list.append(temp_dictionary)
 
+print(media_list[0])
 
 with open("filtered_data.json", "w") as outfile: 
-    json.dump(media_list, outfile, indent=3)
+    json.dump(media_list, outfile, indent=4)
 
 
-print(media_list)

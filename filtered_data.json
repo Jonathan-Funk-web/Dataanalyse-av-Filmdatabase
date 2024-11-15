@@ -1,247 +1,247 @@
 [
-   {
-      "genre_ids": [
-         878,
-         28,
-         12
-      ],
-      "id": 912649,
-      "original_language": "en",
-      "title": "Venom: The Last Dance",
-      "vote_average": 6.387,
-      "vote_count": 658
-   },
-   {
-      "genre_ids": [
-         18,
-         28,
-         27
-      ],
-      "id": 1118031,
-      "original_language": "es",
-      "title": "Apocalypse Z: The Beginning of the End",
-      "vote_average": 6.8,
-      "vote_count": 387
-   },
-   {
-      "genre_ids": [
-         27,
-         53,
-         9648
-      ],
-      "id": 1034541,
-      "original_language": "en",
-      "title": "Terrifier 3",
-      "vote_average": 6.9,
-      "vote_count": 886
-   },
-   {
-      "genre_ids": [
-         16,
-         878,
-         10751
-      ],
-      "id": 1184918,
-      "original_language": "en",
-      "title": "The Wild Robot",
-      "vote_average": 8.49,
-      "vote_count": 2722
-   },
-   {
-      "genre_ids": [
-         18,
-         27,
-         878
-      ],
-      "id": 933260,
-      "original_language": "en",
-      "title": "The Substance",
-      "vote_average": 7.3,
-      "vote_count": 1809
-   },
-   {
-      "genre_ids": [
-         28,
-         35,
-         878
-      ],
-      "id": 533535,
-      "original_language": "en",
-      "title": "Deadpool & Wolverine",
-      "vote_average": 7.7,
-      "vote_count": 5222
-   },
-   {
-      "genre_ids": [
-         16,
-         878,
-         12,
-         10751
-      ],
-      "id": 698687,
-      "original_language": "en",
-      "title": "Transformers One",
-      "vote_average": 8.1,
-      "vote_count": 651
-   },
-   {
-      "genre_ids": [
-         28,
-         35,
-         12
-      ],
-      "id": 845781,
-      "original_language": "en",
-      "title": "Red One",
-      "vote_average": 6.7,
-      "vote_count": 85
-   },
-   {
-      "genre_ids": [
-         878,
-         27
-      ],
-      "id": 945961,
-      "original_language": "en",
-      "title": "Alien: Romulus",
-      "vote_average": 7.3,
-      "vote_count": 2237
-   },
-   {
-      "genre_ids": [
-         28,
-         27,
-         53,
-         878
-      ],
-      "id": 1051896,
-      "original_language": "en",
-      "title": "Arcadian",
-      "vote_average": 6.0,
-      "vote_count": 423
-   },
-   {
-      "genre_ids": [
-         28,
-         12,
-         18,
-         36,
-         10749,
-         53
-      ],
-      "id": 1084736,
-      "original_language": "fr",
-      "title": "The Count of Monte-Cristo",
-      "vote_average": 8.3,
-      "vote_count": 798
-   },
-   {
-      "genre_ids": [
-         18,
-         80,
-         53
-      ],
-      "id": 889737,
-      "original_language": "en",
-      "title": "Joker: Folie \u00e0 Deux",
-      "vote_average": 5.6,
-      "vote_count": 1514
-   },
-   {
-      "genre_ids": [
-         878,
-         28
-      ],
-      "id": 335983,
-      "original_language": "en",
-      "title": "Venom",
-      "vote_average": 6.835,
-      "vote_count": 15928
-   },
-   {
-      "genre_ids": [
-         28,
-         53
-      ],
-      "id": 1116490,
-      "original_language": "en",
-      "title": "Cash Out",
-      "vote_average": 6.2,
-      "vote_count": 91
-   },
-   {
-      "genre_ids": [
-         16,
-         10751,
-         35,
-         28
-      ],
-      "id": 519182,
-      "original_language": "en",
-      "title": "Despicable Me 4",
-      "vote_average": 7.1,
-      "vote_count": 2138
-   },
-   {
-      "genre_ids": [
-         878,
-         28,
-         12
-      ],
-      "id": 580489,
-      "original_language": "en",
-      "title": "Venom: Let There Be Carnage",
-      "vote_average": 6.8,
-      "vote_count": 10155
-   },
-   {
-      "genre_ids": [
-         53,
-         12,
-         28,
-         878
-      ],
-      "id": 1196470,
-      "original_language": "fr",
-      "title": "Survive",
-      "vote_average": 5.1,
-      "vote_count": 42
-   },
-   {
-      "genre_ids": [
-         28,
-         53,
-         80
-      ],
-      "id": 976734,
-      "original_language": "en",
-      "title": "Canary Black",
-      "vote_average": 6.3,
-      "vote_count": 220
-   },
-   {
-      "genre_ids": [
-         16,
-         10751,
-         12,
-         35,
-         18
-      ],
-      "id": 1022789,
-      "original_language": "en",
-      "title": "Inside Out 2",
-      "vote_average": 7.601,
-      "vote_count": 4683
-   },
-   {
-      "genre_ids": [
-         28,
-         53
-      ],
-      "id": 1331375,
-      "original_language": "en",
-      "title": "Dominique",
-      "vote_average": 7.2,
-      "vote_count": 34
-   }
+    {
+        "genre_ids": [
+            878,
+            28,
+            12
+        ],
+        "id": 912649,
+        "original_language": "en",
+        "title": "Venom: The Last Dance",
+        "vote_average": 6.387,
+        "vote_count": 658
+    },
+    {
+        "genre_ids": [
+            18,
+            28,
+            27
+        ],
+        "id": 1118031,
+        "original_language": "es",
+        "title": "Apocalypse Z: The Beginning of the End",
+        "vote_average": 6.8,
+        "vote_count": 387
+    },
+    {
+        "genre_ids": [
+            27,
+            53,
+            9648
+        ],
+        "id": 1034541,
+        "original_language": "en",
+        "title": "Terrifier 3",
+        "vote_average": 6.9,
+        "vote_count": 886
+    },
+    {
+        "genre_ids": [
+            16,
+            878,
+            10751
+        ],
+        "id": 1184918,
+        "original_language": "en",
+        "title": "The Wild Robot",
+        "vote_average": 8.49,
+        "vote_count": 2722
+    },
+    {
+        "genre_ids": [
+            18,
+            27,
+            878
+        ],
+        "id": 933260,
+        "original_language": "en",
+        "title": "The Substance",
+        "vote_average": 7.3,
+        "vote_count": 1809
+    },
+    {
+        "genre_ids": [
+            28,
+            35,
+            878
+        ],
+        "id": 533535,
+        "original_language": "en",
+        "title": "Deadpool & Wolverine",
+        "vote_average": 7.7,
+        "vote_count": 5222
+    },
+    {
+        "genre_ids": [
+            16,
+            878,
+            12,
+            10751
+        ],
+        "id": 698687,
+        "original_language": "en",
+        "title": "Transformers One",
+        "vote_average": 8.1,
+        "vote_count": 651
+    },
+    {
+        "genre_ids": [
+            28,
+            35,
+            12
+        ],
+        "id": 845781,
+        "original_language": "en",
+        "title": "Red One",
+        "vote_average": 6.7,
+        "vote_count": 85
+    },
+    {
+        "genre_ids": [
+            878,
+            27
+        ],
+        "id": 945961,
+        "original_language": "en",
+        "title": "Alien: Romulus",
+        "vote_average": 7.3,
+        "vote_count": 2237
+    },
+    {
+        "genre_ids": [
+            28,
+            27,
+            53,
+            878
+        ],
+        "id": 1051896,
+        "original_language": "en",
+        "title": "Arcadian",
+        "vote_average": 6.0,
+        "vote_count": 423
+    },
+    {
+        "genre_ids": [
+            28,
+            12,
+            18,
+            36,
+            10749,
+            53
+        ],
+        "id": 1084736,
+        "original_language": "fr",
+        "title": "The Count of Monte-Cristo",
+        "vote_average": 8.3,
+        "vote_count": 798
+    },
+    {
+        "genre_ids": [
+            18,
+            80,
+            53
+        ],
+        "id": 889737,
+        "original_language": "en",
+        "title": "Joker: Folie \u00e0 Deux",
+        "vote_average": 5.6,
+        "vote_count": 1514
+    },
+    {
+        "genre_ids": [
+            878,
+            28
+        ],
+        "id": 335983,
+        "original_language": "en",
+        "title": "Venom",
+        "vote_average": 6.835,
+        "vote_count": 15928
+    },
+    {
+        "genre_ids": [
+            28,
+            53
+        ],
+        "id": 1116490,
+        "original_language": "en",
+        "title": "Cash Out",
+        "vote_average": 6.2,
+        "vote_count": 91
+    },
+    {
+        "genre_ids": [
+            16,
+            10751,
+            35,
+            28
+        ],
+        "id": 519182,
+        "original_language": "en",
+        "title": "Despicable Me 4",
+        "vote_average": 7.1,
+        "vote_count": 2138
+    },
+    {
+        "genre_ids": [
+            878,
+            28,
+            12
+        ],
+        "id": 580489,
+        "original_language": "en",
+        "title": "Venom: Let There Be Carnage",
+        "vote_average": 6.8,
+        "vote_count": 10155
+    },
+    {
+        "genre_ids": [
+            53,
+            12,
+            28,
+            878
+        ],
+        "id": 1196470,
+        "original_language": "fr",
+        "title": "Survive",
+        "vote_average": 5.1,
+        "vote_count": 42
+    },
+    {
+        "genre_ids": [
+            28,
+            53,
+            80
+        ],
+        "id": 976734,
+        "original_language": "en",
+        "title": "Canary Black",
+        "vote_average": 6.3,
+        "vote_count": 220
+    },
+    {
+        "genre_ids": [
+            16,
+            10751,
+            12,
+            35,
+            18
+        ],
+        "id": 1022789,
+        "original_language": "en",
+        "title": "Inside Out 2",
+        "vote_average": 7.601,
+        "vote_count": 4683
+    },
+    {
+        "genre_ids": [
+            28,
+            53
+        ],
+        "id": 1331375,
+        "original_language": "en",
+        "title": "Dominique",
+        "vote_average": 7.2,
+        "vote_count": 34
+    }
 ]
