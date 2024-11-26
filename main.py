@@ -1,4 +1,4 @@
-import os,requests,json,sys
+import os,os.path,requests,json,sys
 from dotenv import load_dotenv 
 
 
@@ -12,11 +12,12 @@ data_wanted = ["genre_ids","id","original_language","title","vote_average","vote
 url_auth = "https://api.themoviedb.org/3/authentication"
 url_get_movies = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc"
 url_get_movie_genres = "https://api.themoviedb.org/3/genre/movie/list?language=en"
+url_get_newest_movies = "https://api.themoviedb.org/3/movie/changes?page=1"
 
 
 #TODO: Work on going through the pages for the api search. Use a loop and change the url with it
 
-def get_data(url,Get_new_data: bool = True, Filter_data: bool = True):
+def get_data(url,location, Get_new_data: bool = True, Filter_data: bool = True):
     """
     :param url: What API URL to use
     :param Get_new_data: If True, replaces data.json with the new data.
@@ -35,24 +36,20 @@ def get_data(url,Get_new_data: bool = True, Filter_data: bool = True):
         response = requests.get(url, headers=headers) 
         response_text = json.loads(response.text)
         response_text_formatted = json.dumps(response_text, indent=4)
-        print(response_text_formatted)
         if not response_text.get("success", True):
             sys.exit("API conection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
         
-        #TODO: Make the open function dependant on what URL we use, so that we get a new file if i get the genres for example.
-        with open("data.json", "w") as f:
+        with open("Data/" + location + ".json", "w") as f:
             f.write(response_text_formatted)
     else:
         print("Did not get new data, used old data. \n")
-        with open("data.json") as f:
+        with open("Data/" + location + ".json") as f:
             response_text = json.load(f)
 
     if url != url_auth:   
-        if url == url_get_movies:    
+        if (url == url_get_movies) and (Filter_data == True):    
             data = response_text["results"]
             filter_data(data,data_wanted)
-
-
 
 
 def filter_data(data,filter):
@@ -75,5 +72,28 @@ def filter_data(data,filter):
     with open("filtered_data.json", "w") as outfile: 
         json.dump(media_list, outfile, indent=4)
 
-get_data(url_get_movies)
 
+def get_movie_genre(genre_id=None):
+    """
+    Uses the API to get the list of genre-id pairs. Then it writes it to "Data/movie-genres.json", if that file already exists then it does not write it.
+    """
+
+    if not os.path.isfile("Data/movie-genres.json"): #Does an API call if the .json file is missing
+        print("Data/movie-genres.json does not exist. \nMaking new movie-genres.json file.")
+        get_data(url_get_movie_genres,"movie-genres")
+    
+    f = open("Data/movie-genres.json","r")
+    data = json.load(f)
+
+    if genre_id is None: #Prints the list of genres
+        print("Genres found: ")
+        for i in data["genres"]:
+            print(" -" + i["name"] + " has id: " + str(i["id"]))
+
+    if genre_id is not None:
+        for i in data["genres"]:
+            if i["id"] == genre_id:
+                print(i["name"])
+        print("Did not find a genre with id: " + str(genre_id))
+
+get_movie_genre()
