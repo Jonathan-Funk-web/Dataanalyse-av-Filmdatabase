@@ -1,2 +1,3 @@
 .env
-.json
+/Data
+/__pycache__

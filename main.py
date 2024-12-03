@@ -7,12 +7,14 @@ media_list = []
 adult_list = []
 genre_list = {}
 data_wanted = ["genre_ids","id","original_language","title","vote_average","vote_count"]
+last_date_checked = 0
 
 #API request 
 url_auth = "https://api.themoviedb.org/3/authentication"
 url_get_movies = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc"
 url_get_movie_genres = "https://api.themoviedb.org/3/genre/movie/list?language=en"
 url_get_newest_movies = "https://api.themoviedb.org/3/movie/changes?page=1"
+url_get_people_list = "https://api.themoviedb.org/3/person/changes?page=1"
 
 
 #TODO: Work on going through the pages for the api search. Use a loop and change the url with it
@@ -37,7 +39,7 @@ def get_data(url,location, Get_new_data: bool = True, Filter_data: bool = True):
         response_text = json.loads(response.text)
         response_text_formatted = json.dumps(response_text, indent=4)
         if not response_text.get("success", True):
-            sys.exit("API conection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
+            sys.exit("API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
         
         with open("Data/" + location + ".json", "w") as f:
             f.write(response_text_formatted)
@@ -76,6 +78,7 @@ def filter_data(data,filter):
 def get_movie_genre(genre_id=None):
     """
     Uses the API to get the list of genre-id pairs. Then it writes it to "Data/movie-genres.json", if that file already exists then it does not write it.
+    :return: If parameter is empty, returns a list of all genre ids. if parameter is not empty, returns the name of the genre_id
     """
 
     if not os.path.isfile("Data/movie-genres.json"): #Does an API call if the .json file is missing
@@ -84,16 +87,62 @@ def get_movie_genre(genre_id=None):
     
     f = open("Data/movie-genres.json","r")
     data = json.load(f)
-
+    
     if genre_id is None: #Prints the list of genres
-        print("Genres found: ")
+        #print("Genres found: ")
+        genre_id_list_keys = []
+        genre_id_list_values = []
+        genre_id_list_dict = {}
         for i in data["genres"]:
-            print(" -" + i["name"] + " has id: " + str(i["id"]))
+            #print(" -" + i["name"] + " has id: " + str(i["id"]))
+            genre_id_list_keys.append(i["id"])
+            genre_id_list_values.append(i["name"])
+        for key in genre_id_list_keys:
+            for value in genre_id_list_values:
+                genre_id_list_dict[key] = value
+                genre_id_list_values.remove(value)
+                break
+        return genre_id_list_dict
+
 
     if genre_id is not None:
         for i in data["genres"]:
             if i["id"] == genre_id:
-                print(i["name"])
+                return i["name"]
         print("Did not find a genre with id: " + str(genre_id))
+    f.close()
 
-get_movie_genre()
+def genre_vote_score(data: str): #TODO: Make it so that this function outputs both genre_averages and genre_counts in to on dict. Also have it take in to account vote_count.
+    """
+    Finds the rating for each genre. It takes each movies "vote_avrage" and adds it to each genres total sum (so if a movie has 2 genres each genre gets the movies "vote_avrage")
+    """
+    genre_ratings = {}
+    genre_counts = {}
+
+    with open("Data/filtered_data.json", 'r') as file:
+        movies = json.load(file)
+
+    for movie in movies:
+        rating = movie['vote_average']
+        for genre_id in movie['genre_ids']:
+            genre_name = get_movie_genre().get(genre_id)
+            if genre_name:
+                if genre_name not in genre_ratings:
+                    genre_ratings[genre_name] = 0
+                    genre_counts[genre_name] = 0
+                genre_ratings[genre_name] += rating
+                genre_counts[genre_name] += 1
+
+    genre_averages = {}
+    for genre_name in genre_ratings:
+        average_rating = genre_ratings[genre_name] / genre_counts[genre_name]
+        genre_averages[genre_name] = average_rating
+
+    return genre_averages,genre_counts
+
+
+
+
+
+
+print(genre_vote_score("Data/filtered_data.json"))
