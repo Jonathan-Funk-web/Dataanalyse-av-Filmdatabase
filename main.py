@@ -1,12 +1,8 @@
 import os,os.path,requests,json,sys
 from dotenv import load_dotenv 
 
-
-Get_new_data = True #If true, does a API request, if false uses data in data.json
-media_list = [] 
-adult_list = []
-genre_list = {}
-data_wanted = ["genre_ids","id","original_language","title","vote_average","vote_count"]
+_data_wanted = ["budget","genres","id","origin_country","original_language","original_title","popularity","production_companies","release_date","revenue","runtime","vote_average","vote_count"]
+data_wanted = ["id","title","test"]
 last_date_checked = 0
 
 #API request 
@@ -16,63 +12,53 @@ url_get_movie_genres = "https://api.themoviedb.org/3/genre/movie/list?language=e
 url_get_newest_movies = "https://api.themoviedb.org/3/movie/changes?page=1"
 url_get_people_list = "https://api.themoviedb.org/3/person/changes?page=1"
 
-
 #TODO: Work on going through the pages for the api search. Use a loop and change the url with it
-
-def get_data(url,location, Get_new_data: bool = True, Filter_data: bool = True):
+def get_data(url: str,location: str) -> None:
     """
     :param url: What API URL to use
     :param Get_new_data: If True, replaces data.json with the new data.
     """
-    if Get_new_data:
-        load_dotenv() 
-        Auth_key = os.getenv("MOVIEDB_APP_AUTH_DOMAIN")
+    load_dotenv() 
+    Auth_key = os.getenv("MOVIEDB_APP_AUTH_DOMAIN")
+    #TODO: make this only get data if data.json is empty (as to reduce the amount of searches)
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer %s" % Auth_key
+    }
+
+    response = requests.get(url, headers=headers) 
+    response_text = json.loads(response.text)
+    response_text_formatted = json.dumps(response_text, indent=4)
+    if not response_text.get("success", True):
+        sys.exit("API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
+    
+    with open("Data/" + location + ".json", "w") as f:
+        f.write(response_text_formatted)
 
 
-        #TODO: make this only get data if data.json is empty (as to reduce the amount of searches)
-        headers = {
-            "accept": "application/json",
-            "Authorization": "Bearer %s" % Auth_key
-        }
-
-        response = requests.get(url, headers=headers) 
-        response_text = json.loads(response.text)
-        response_text_formatted = json.dumps(response_text, indent=4)
-        if not response_text.get("success", True):
-            sys.exit("API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
-        
-        with open("Data/" + location + ".json", "w") as f:
-            f.write(response_text_formatted)
-    else:
-        print("Did not get new data, used old data. \n")
-        with open("Data/" + location + ".json") as f:
-            response_text = json.load(f)
-
-    if url != url_auth:   
-        if (url == url_get_movies) and (Filter_data == True):    
-            data = response_text["results"]
-            filter_data(data,data_wanted)
-
-
-def filter_data(data,filter):
+def filter_data(location: str,filter: list):
     """
     :param data: The data that gets filtered
     :param filter: Whitelist filter on the data file
-    :return: Filtered data
+    :return: Filtered data 
     """
-    for i in range(0,len(data)):
-        if data[i]["adult"]: #If the API fetch fails the filter somehow, it appends the adult movies here
-            print("is adult")
-            adult_list.append(data[i]["title"])
-            continue
+    filtered_data = {}
+    with open(location, "r") as file:
+        data = json.load(file)
 
-        temp_dictionary = {} #Adds the JSON data as dictionaries, think of it as making the json smaller
-        for j in filter:
-            temp_dictionary.update({j:data[i][j]})
-        media_list.append(temp_dictionary)
+    for info in filter:
+        for item in data["results"]:
+            filtered_data.update({"Movie nr.":i})
+            if str(info) in item:
+                print(filtered_data)
+                filtered_data.update({info:item[str(info)]})
 
-    with open("filtered_data.json", "w") as outfile: 
-        json.dump(media_list, outfile, indent=4)
+
+    print(filtered_data)
+    return
+
+
+filter_data("Data/data.json",data_wanted)
 
 
 def get_movie_genre(genre_id=None):
@@ -89,12 +75,10 @@ def get_movie_genre(genre_id=None):
     data = json.load(f)
     
     if genre_id is None: #Prints the list of genres
-        #print("Genres found: ")
         genre_id_list_keys = []
         genre_id_list_values = []
         genre_id_list_dict = {}
         for i in data["genres"]:
-            #print(" -" + i["name"] + " has id: " + str(i["id"]))
             genre_id_list_keys.append(i["id"])
             genre_id_list_values.append(i["name"])
         for key in genre_id_list_keys:
@@ -141,8 +125,3 @@ def genre_vote_score(data: str): #TODO: Make it so that this function outputs bo
     return genre_averages,genre_counts
 
 
-
-
-
-
-print(genre_vote_score("Data/filtered_data.json"))
