@@ -1,6 +1,41 @@
 import os,os.path,requests,json,sys
 from dotenv import load_dotenv 
 
+### THE TASK ###
+"""
+Do data analasys of the following:
+- What directors has directed the most movies/tv-shows
+- What actors have been the most active
+- What genres has been most popular each decade
+"""
+
+### THE PLAN ###
+"""
+1. Get movie/tv-show (hearafter called just "media") with get_data() using a discovery API link
+2. Filter the data from step 1. with filter_data(id)
+3. Use get_data() with the id's gotten from step 2. to get extended info on the media
+4. Use filter_data(data_wanted) to get the data i am going to use for my data analasys
+5. Put that up in a graph (via a .ipynb file since codespaces are wack >:[ )
+6. Be proud  (Mandatory)
+"""
+
+### PROGRESS ###
+"""
+- I have set up the git to be able to backup/work from different places.
+- I have managed to learn: TMDB's API, API, .JSON, .env
+- I have made get_data() that gets data from TMDB's API.
+- I have made filter_data() that goes through a .JSON file and returns only the data I want (Might make this so generalized that I will use it for other projects woo) 
+"""
+
+### TODO ###
+"""
+- API Pagination
+- API URL appending
+- Fix the filter_data()
+- Remove get_movie_genre() It got decrepit as I learned of this API https://developer.themoviedb.org/reference/movie-details 
+- make the get_genre_scoere() actually self made
+"""
+
 _data_wanted = ["budget","genres","id","origin_country","original_language","original_title","popularity","production_companies","release_date","revenue","runtime","vote_average","vote_count"]
 data_wanted = ["id","title","test"]
 last_date_checked = 0
@@ -46,9 +81,10 @@ def filter_data(location: str,filter: list):
     with open(location, "r") as file:
         data = json.load(file)
 
+    #TODO: The following code just replaces the dict with the newest value-key pair, find a way to make each movie have its own data
     for info in filter:
         for item in data["results"]:
-            filtered_data.update({"Movie nr.":i})
+            filtered_data.update({"Movie nr.":i}) 
             if str(info) in item:
                 print(filtered_data)
                 filtered_data.update({info:item[str(info)]})
