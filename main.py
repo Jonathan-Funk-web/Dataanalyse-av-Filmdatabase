@@ -36,8 +36,7 @@ Do data analasys of the following:
 - make the get_genre_scoere() actually self made
 """
 
-_data_wanted = ["budget","genres","id","origin_country","original_language","original_title","popularity","production_companies","release_date","revenue","runtime","vote_average","vote_count"]
-data_wanted = ["id","title","test"]
+data_wanted = ["title","budget","genres","id","origin_country","original_language","original_title","popularity","production_companies","release_date","revenue","runtime","vote_average","vote_count"]
 last_date_checked = 0
 
 #API request 
@@ -46,7 +45,7 @@ url_get_movies = "https://api.themoviedb.org/3/discover/movie?include_adult=fals
 url_get_movie_genres = "https://api.themoviedb.org/3/genre/movie/list?language=en"
 url_get_newest_movies = "https://api.themoviedb.org/3/movie/changes?page=1"
 url_get_people_list = "https://api.themoviedb.org/3/person/changes?page=1"
-
+url_get_movie_details = "https://api.themoviedb.org/3/movie/"
 #TODO: Work on going through the pages for the api search. Use a loop and change the url with it
 def get_data(url: str,location: str) -> None:
     """
@@ -77,52 +76,23 @@ def filter_data(location: str,filter: list):
     :param filter: Whitelist filter on the data file
     :return: Filtered data 
     """
-    filtered_data = {}
+    filtered_data = []
     with open(location, "r") as file:
         data = json.load(file)
 
-    #TODO: The following code just replaces the dict with the newest value-key pair, find a way to make each movie have its own data
-    for info in filter:
-        for item in data["results"]:
-            filtered_data.update({"Movie nr.":i}) 
-            if str(info) in item:
-                print(filtered_data)
-                filtered_data.update({info:item[str(info)]})
-
-
-    print(filtered_data)
-    return
-
-
-filter_data("Data/data.json",data_wanted)
-
-
-def get_movie_genre(genre_id=None):
-    """
-    Uses the API to get the list of genre-id pairs. Then it writes it to "Data/movie-genres.json", if that file already exists then it does not write it.
-    :return: If parameter is empty, returns a list of all genre ids. if parameter is not empty, returns the name of the genre_id
-    """
-
-    if not os.path.isfile("Data/movie-genres.json"): #Does an API call if the .json file is missing
-        print("Data/movie-genres.json does not exist. \nMaking new movie-genres.json file.")
-        get_data(url_get_movie_genres,"movie-genres")
+    for item in data["results"]:#Adds the media to a dict
+        filtered_dict = {}  
+        for info in filter:  
+            if str(info) in item:  
+                filtered_dict[info] = item[str(info)]
+        if filtered_dict:
+            filtered_data.append(filtered_dict)
+    filtered_dict = {d['id']: d for d in filtered_data}
+    #Trimming the location string
+    new_location = location[location.find('/') + 1:-5]
     
-    f = open("Data/movie-genres.json","r")
-    data = json.load(f)
-    
-    if genre_id is None: #Prints the list of genres
-        genre_id_list_keys = []
-        genre_id_list_values = []
-        genre_id_list_dict = {}
-        for i in data["genres"]:
-            genre_id_list_keys.append(i["id"])
-            genre_id_list_values.append(i["name"])
-        for key in genre_id_list_keys:
-            for value in genre_id_list_values:
-                genre_id_list_dict[key] = value
-                genre_id_list_values.remove(value)
-                break
-        return genre_id_list_dict
+    with open("Data/filtered_" + new_location + ".json", "w") as f:
+        json.dump(filtered_dict, f, indent=4)
 
 
     if genre_id is not None:
@@ -161,3 +131,5 @@ def genre_vote_score(data: str): #TODO: Make it so that this function outputs bo
     return genre_averages,genre_counts
 
 
+#get_data(url_get_movie_details+"912649","Test")
+filter_data("Data/Test.json",data_wanted)
