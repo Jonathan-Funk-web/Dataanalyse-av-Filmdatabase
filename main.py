@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 
 ### THE TASK ###
 """
+MOVIEDB_APP_AUTH_DOMAIN
+MOVIEDB_APP_API_KEY
 Do data analasys of the following:
 - What directors has directed the most movies/tv-shows
 - What actors have been the most active
@@ -116,12 +118,17 @@ def get_extra_media_data(location: str):
     return
 
 
-def filter_detailed_data(data_location: str, filter: list, output_location: str):
+def filter_detailed_data(data_location: str, filter: list=["title","id","homepage"]):
     with open(data_location, "r") as file:
         data = json.load(file)
+
+    filtered_data = {}
     
     for item in data:
-        print(item)
+        for filtered in filter:
+            filtered_data.update({item:data[item]["Details"][filtered]})
+
+    print(filtered_data)
     return
 
 
