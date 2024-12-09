@@ -34,10 +34,13 @@ Do data analasys of the following:
 - Fix the filter_data()
 - Remove get_movie_genre() It got decrepit as I learned of this API https://developer.themoviedb.org/reference/movie-details 
 - make the get_genre_scoere() actually self made
+- make all my code consistent (it is ugly atm :( )
 """
-
-data_wanted = ["title","budget","genres","id","origin_country","original_language","original_title","popularity","production_companies","release_date","revenue","runtime","vote_average","vote_count"]
+#Data to whitelest from the .json
+data_wanted = ["budget","genres","keywords","origin_country","original_language","original_title","popularity","production_companies","production_coujntries","release_date","revenue","runtime","spoken_languages","status","title","vote_average","vote_count"]
+credits_data_wanted = ["gender","known_for_department","name","popularity"]
 last_date_checked = 0
+
 
 #API request 
 url_auth = "https://api.themoviedb.org/3/authentication"
@@ -47,10 +50,11 @@ url_get_newest_movies = "https://api.themoviedb.org/3/movie/changes?page=1"
 url_get_people_list = "https://api.themoviedb.org/3/person/changes?page=1"
 url_get_movie_details = "https://api.themoviedb.org/3/movie/"
 #TODO: Work on going through the pages for the api search. Use a loop and change the url with it
-def get_data(url: str,location: str) -> None:
+def get_data(url: str,location: str,write:bool=True) -> None:
     """
     :param url: What API URL to use
     :param Get_new_data: If True, replaces data.json with the new data.
+    :return: Returns the data it gathers
     """
     load_dotenv() 
     Auth_key = os.getenv("MOVIEDB_APP_AUTH_DOMAIN")
@@ -60,17 +64,20 @@ def get_data(url: str,location: str) -> None:
         "Authorization": "Bearer %s" % Auth_key
     }
 
-    response = requests.get(url, headers=headers) 
+    response = requests.get(url, headers=headers)
     response_text = json.loads(response.text)
     response_text_formatted = json.dumps(response_text, indent=4)
     if not response_text.get("success", True):
         sys.exit("API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
     
-    with open("Data/" + location + ".json", "w") as f:
-        f.write(response_text_formatted)
+    if write:
+        with open("Data/" + location + ".json", "w") as f:
+            f.write(response_text_formatted)
+    
+    return response_text
 
 
-def filter_data(location: str,filter: list):
+def filter_basic_data(location: str,filter: list):
     """
     :param data: The data that gets filtered
     :param filter: Whitelist filter on the data file
@@ -93,43 +100,31 @@ def filter_data(location: str,filter: list):
     
     with open("Data/filtered_" + new_location + ".json", "w") as f:
         json.dump(filtered_dict, f, indent=4)
-
-
-    if genre_id is not None:
-        for i in data["genres"]:
-            if i["id"] == genre_id:
-                return i["name"]
-        print("Did not find a genre with id: " + str(genre_id))
     f.close()
 
-def genre_vote_score(data: str): #TODO: Make it so that this function outputs both genre_averages and genre_counts in to on dict. Also have it take in to account vote_count.
-    """
-    Finds the rating for each genre. It takes each movies "vote_avrage" and adds it to each genres total sum (so if a movie has 2 genres each genre gets the movies "vote_avrage")
-    """
-    genre_ratings = {}
-    genre_counts = {}
+def get_extra_media_data(location: str):
+    
+    with open(location, "r") as file:
+        data = json.load(file)
 
-    with open("Data/filtered_data.json", 'r') as file:
-        movies = json.load(file)
+    for item in data:
+        Details = get_data(url_get_movie_details+item+"?append_to_response=credits%2Ckeywords&language=en-US","TEST",write=False)        
+        data[item].update({"Details": Details})
+    with open("Data/extra_media_details.json", "w") as file:
+        json.dump(data, file, indent=4)
 
-    for movie in movies:
-        rating = movie['vote_average']
-        for genre_id in movie['genre_ids']:
-            genre_name = get_movie_genre().get(genre_id)
-            if genre_name:
-                if genre_name not in genre_ratings:
-                    genre_ratings[genre_name] = 0
-                    genre_counts[genre_name] = 0
-                genre_ratings[genre_name] += rating
-                genre_counts[genre_name] += 1
-
-    genre_averages = {}
-    for genre_name in genre_ratings:
-        average_rating = genre_ratings[genre_name] / genre_counts[genre_name]
-        genre_averages[genre_name] = average_rating
-
-    return genre_averages,genre_counts
+    return
 
 
-#get_data(url_get_movie_details+"912649","Test")
-filter_data("Data/Test.json",data_wanted)
+def filter_detailed_data(data_location: str, filter: list, output_location: str):
+    with open(data_location, "r") as file:
+        data = json.load(file)
+    
+    for item in data:
+        print(item)
+    return
+
+
+# filter_basic_data("Data/data.json",["id"]) 
+# get_extra_media_data("Data/filtered_data.json")
+filter_detailed_data("Data/extra_media_details.json")
