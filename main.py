@@ -188,7 +188,7 @@ def get_income(import_location:str, media_id:str) -> float:
         data = json.load(file)
     return data[media_id]["Details"]["revenue"] - data[media_id]["Details"]["budget"]
 
-def get_title(import_location:str, media_id:str, mode: int=0) -> str:
+def get_title(import_location:str, media_id:str, mode:int=0) -> str | bool:
     """
     Gets the title for the media.
     
@@ -218,7 +218,7 @@ def get_popularity(import_location:str, media_id:str) -> float:
     
     Args:
         import_location (str): Location for the .json file with the movie data.
-        media_id (str): The media you want the income for.
+        media_id (str): The media you want the income for. 
     
     Returns:
         float: Popularity Rating
@@ -227,6 +227,26 @@ def get_popularity(import_location:str, media_id:str) -> float:
         data = json.load(file)
 
     return data[media_id]["Details"]["popularity"]
+
+def get_genres(import_location:str, media_id:str) -> list:
+    """
+    Gets the genres for the media.
+    
+    Args:
+        import_location (str): Location for the .json file with the movie data.
+        media_id (str): The media you want the income for.
+    
+    Returns:
+        list: Name of the genres. 
+    """
+    with open(import_location, "r") as file:
+        data = json.load(file)
+    
+    genres = []
+    for i in data[media_id]["Details"]["genres"]:
+        genres.append(i["name"])
+    return genres
+
 
 def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
     """
@@ -242,4 +262,8 @@ def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
     with open(import_location, "r") as file:
         data = json.load(file)
 
-print(get_title("Data/extra_media_details.json","912649"))
+    return data[media_id]["Details"]["PLACEHOLDER"]
+
+    #This is not meatn to be a function, just a template to quickly make new "get_..." functions
+
+print(get_genres("Data/extra_media_details.json","912649"))
