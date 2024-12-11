@@ -138,6 +138,7 @@ def filter_non_basic_data():
     pass
     #This function will use the functions below to filter the data one final time, and get what i will use for the graphs and such. Soon™
 
+#TODO make it so that these functions does not have to open then close the file every time.
 def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float:
     """
     Gets the average votes for the media.
@@ -187,3 +188,58 @@ def get_income(import_location:str, media_id:str) -> float:
         data = json.load(file)
     return data[media_id]["Details"]["revenue"] - data[media_id]["Details"]["budget"]
 
+def get_title(import_location:str, media_id:str, mode: int=0) -> str:
+    """
+    Gets the title for the media.
+    
+    Args:
+        import_location (str): Location for the .json file with the movie data.
+        media_id (str): The media you want the income for.
+        mode (int): 0 gives `title`. 1 gives `original_title`. 2 gives a bool for if `title == original_title` 
+    Returns:
+        str: Title for the media.
+    """
+    with open(import_location, "r") as file:
+        data = json.load(file)
+    
+    #assert mode not in [0,1,2], "Mode (third argument) was %s\nIt has to be either: 0 or 1 or 2" % mode
+    if mode == 0:
+        return data[media_id]["Details"]["title"]
+    elif mode == 1:
+        return data[media_id]["Details"]["original_title"]
+    elif mode == 2:
+        return data[media_id]["Details"]["title"] == data[media_id]["Details"]["original_title"]
+
+    #TODO figure out if i should place file.close() here or not
+
+def get_popularity(import_location:str, media_id:str) -> float:
+    """
+    Gets the popularity rating in the media.
+    
+    Args:
+        import_location (str): Location for the .json file with the movie data.
+        media_id (str): The media you want the income for.
+    
+    Returns:
+        float: Popularity Rating
+    """
+    with open(import_location, "r") as file:
+        data = json.load(file)
+
+    return data[media_id]["Details"]["popularity"]
+
+def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
+    """
+    Gets the ...  in the media.
+    
+    Args:
+        import_location (str): Location for the .json file with the movie data.
+        media_id (str): The media you want the income for.
+    
+    Returns:
+        ...
+    """
+    with open(import_location, "r") as file:
+        data = json.load(file)
+
+print(get_title("Data/extra_media_details.json","912649"))
