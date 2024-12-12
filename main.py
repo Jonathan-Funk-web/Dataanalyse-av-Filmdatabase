@@ -398,6 +398,32 @@ def get_runtime(import_location:str, media_id:str) -> int:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
+def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","profile_path","popularity"]) -> list[dict]:
+    """
+    Gets the casting credits for the media.
+    
+    Args:
+        import_location (str): Location for the .json file with the movie data.
+        media_id (str): The media you want the income for.
+        info_wanted (str): The information wanted. (Supported parameters: `gender` gets the actor's gender (`0` = not set / not specified. `1` = female. `2` = male. `3` = non-binary.), `name` gives the actor's name, `popularity` gives the actor's pupularity score, `profile_path` gives the URL for their image.)
+    Returns:
+        list[dict]: List of dictionaries, each index in the list is an actor, each dictionary is a K:V pair for their info 
+    """
+
+    with open(import_location, "r") as file:
+        data = json.load(file)
+        actor = {}
+        actor_list = []
+        for i in range(len(data[media_id]["Details"]["credits"]["cast"])):
+            for info in info_wanted:
+                actor.update({info:data[media_id]["Details"]["credits"]["cast"][i][info]})
+            actor_list.append(actor)
+            actor = {}
+        return actor_list
+
+
+    #This is not meatn to be a function, just a template to quickly make new "get_..." functions
+
 def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
     """
     Gets the ...  in the media.
@@ -416,4 +442,4 @@ def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-print(get_languages("Data/extra_media_details.json","912649","spoken_languages"))
+print(get_cast("Data/extra_media_details.json","912649"))
