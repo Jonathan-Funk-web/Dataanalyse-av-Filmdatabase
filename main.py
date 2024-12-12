@@ -285,21 +285,27 @@ def get_countries(import_location:str, media_id:str) -> str:
 
     return data[media_id]["Details"]["origin_country"][0]
 
-def get_languages(import_location:str, media_id:str) -> str:
+def get_languages(import_location:str, media_id:str, info_wanted:str="original_language") -> str|list[str]:
     """
     Gets the languages used in the media.
     
     Args:
         import_location (str): Location for the .json file with the movie data.
         media_id (str): The media you want the income for.
-    
+        info_wanted (str): The information wanted. (Supported parameters: `original_language` gives the original language for the media. `spoken_languages` gives list of languages spoken in the media.
     Returns:
-        str: language
+        str: Language in format `iso_639_1`.
+        list[str]: Language in format `iso_639_1`.
     """
     with open(import_location, "r") as file:
         data = json.load(file)
-
-    return data[media_id]["Details"]["original_language"]
+    if info_wanted == "original_language":
+        return data[media_id]["Details"]["original_language"]
+    if info_wanted == "spoken_languages":
+        language_list = []
+        for i in range(len(data[media_id]["Details"]["spoken_languages"])):
+            language_list.append(data[media_id]["Details"]["spoken_languages"][i]["iso_639_1"])
+        return language_list
 
 def get_popularity(import_location:str, media_id:str) -> float:
     """
@@ -328,7 +334,7 @@ def get_production(import_location:str, media_id:str, info_wanted:str="name", co
         company_nr (int): Gives the information for company number `company_nr`. Is not needed for `amount`, `name_list`, `all_countries`.
     Returns:
         str: Information wanted (if used `info_wanted=logo` or `info_wanted=name` )
-        list[str]: Information wanted (if used `info_wanted=name_list` or `info_wanted=country_list`)
+        list[str]: Information wanted (if used `info_wanted=name_list` or `info_wanted=country_list`, country information is given in format `iso_3166_1`)
         int: Amount of companies (if used `info_wanted=amount`)
     """
     with open(import_location, "r") as file:
@@ -410,4 +416,4 @@ def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-print(get_release_date("Data/extra_media_details.json","912649"))
+print(get_languages("Data/extra_media_details.json","912649","spoken_languages"))
