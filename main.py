@@ -166,7 +166,7 @@ def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float
     this_media_vote_count = data[media_id]["vote_count"]
     weighted_factor = this_media_vote_count/all_media_highest_vote_amount
 
-    weighted_rating = round(weighted_factor*this_media_vote_average + (1-weighted_factor)*all_movie_average_vote,2)
+    weighted_rating = round(weighted_factor*this_media_vote_average + (1-weighted_factor)*all_media_average_vote,2)
     file.close()
     if weighted:
         return weighted_rating
