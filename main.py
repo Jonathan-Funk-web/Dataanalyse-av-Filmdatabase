@@ -1,4 +1,4 @@
-import os,os.path,requests,json,sys,math
+import os,os.path,requests,json,sys
 from dotenv import load_dotenv 
 
 ### THE TASK ###
@@ -247,7 +247,7 @@ def get_genres(import_location:str, media_id:str) -> list:
         genres.append(i["name"])
     return genres
 
-def get_images(import_location:str, media_id:str, image_type:str="poster",image_size="original") -> str:
+def get_images(import_location:str, media_id:str, image_type:str="poster", image_size:str="original", collection_image:bool=False) -> str:
     """
     Gets the images for the media.
     
@@ -256,15 +256,19 @@ def get_images(import_location:str, media_id:str, image_type:str="poster",image_
         media_id (str): The media you want the income for.
         image_type (str): The image from the media to get. (Supported types: `backdrop` and `poster`)
         image_size (str): The size of the image. (Supported sizes:\n Backdrop: `w300`, `w780`, `w1280`, `original`.\n Poster: `w92`, `w154`, `w185`, `w342`, `w500`, `w780`, `original`.)
+        collection_image (bool): If true it gets the images from the collection the media belongs to.
     Returns:
         str: Image URL
     """
     with open(import_location, "r") as file:
         data = json.load(file)
     image_type = image_type + "_path"
-    return "https://image.tmdb.org/t/p/" + image_size + data[media_id]["Details"][image_type]
-
-    #This is not meatn to be a function, just a template to quickly make new "get_..." functions
+    if collection_image:
+        if data[media_id]["Details"]["belongs_to_collection"] == None:
+            return None
+        return "https://image.tmdb.org/t/p/" + image_size + data[media_id]["Details"]["belongs_to_collection"][image_type]
+    else:
+        return "https://image.tmdb.org/t/p/" + image_size + data[media_id]["Details"][image_type]
 
 
 def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
@@ -285,4 +289,4 @@ def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-print(get_images("Data/extra_media_details.json","912649","backdrop","original"))
+print(get_images("Data/extra_media_details.json","1035048","poster","original",True))
