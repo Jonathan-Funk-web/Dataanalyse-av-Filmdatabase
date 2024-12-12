@@ -358,6 +358,22 @@ def get_production(import_location:str, media_id:str, info_wanted:str="name", co
                 country_list.append(data[media_id]["Details"]["production_companies"][i]["origin_country"])
         return country_list
 
+def get_release_date(import_location:str, media_id:str) -> str:
+    """
+    Gets the release date for the media (in YYYY-MM-DD).
+    
+    Args:
+        import_location (str): Location for the .json file with the movie data.
+        media_id (str): The media you want the income for.
+    
+    Returns:
+        str: Release Date
+    """
+    with open(import_location, "r") as file:
+        data = json.load(file)
+
+    return data[media_id]["Details"]["release_date"]
+
 def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
     """
     Gets the ...  in the media.
@@ -376,4 +392,4 @@ def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-print(get_production("Data/extra_media_details.json","1241982","all_countries"))
+print(get_release_date("Data/extra_media_details.json","912649"))
