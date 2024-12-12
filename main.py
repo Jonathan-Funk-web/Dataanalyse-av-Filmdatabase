@@ -426,7 +426,7 @@ def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","g
 
 def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","job","department","known_for_department","profile_path","popularity"]) -> list[dict]:
     """
-    Gets the casting credits for the media.
+    Gets the crew credits for the media.
     
     Args:
         import_location (str): Location for the .json file with the movie data.
@@ -440,9 +440,9 @@ def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","g
         data = json.load(file)
         crew = {}
         crew_list = []
-        for i in range(len(data[media_id]["Details"]["credits"]["cast"])):
+        for i in range(len(data[media_id]["Details"]["credits"]["crew"])):
             for info in info_wanted:
-                crew.update({info:data[media_id]["Details"]["credits"]["cast"][i][info]})
+                crew.update({info:data[media_id]["Details"]["credits"]["crew"][i][info]})
             crew_list.append(crew)
             crew = {}
         return crew_list
@@ -450,23 +450,24 @@ def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","g
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-
-def get_PLACEHOLDER(import_location:str, media_id:str) -> None:
+def get_keywords(import_location:str, media_id:str) -> list[str]:
     """
-    Gets the ...  in the media.
+    Gets the keywords for the media.
     
     Args:
         import_location (str): Location for the .json file with the movie data.
         media_id (str): The media you want the income for.
-    
+
     Returns:
-        ...
+        list[str]: List of the keywords.
     """
     with open(import_location, "r") as file:
         data = json.load(file)
-
-    return data[media_id]["Details"]["PLACEHOLDER"]
+    keywords = []
+    for i in range(len(data[media_id]["Details"]["keywords"]["keywords"])):
+        keywords.append(data[media_id]["Details"]["keywords"]["keywords"][i]["name"])
+    return keywords
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-print(get_cast("Data/extra_media_details.json","912649"))
+print(get_keywords("Data/extra_media_details.json","912649"))
