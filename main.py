@@ -134,9 +134,8 @@ def get_extra_media_data(import_location: str) -> None:
         json.dump(data, file, indent=4)
     file.close()
 
-def filter_non_basic_data():
-    pass
-    #This function will use the functions below to filter the data one final time, and get what i will use for the graphs and such. Soon™
+def filter_non_basic_data(import_location:str) -> None:
+    return
 
 #TODO make it so that these functions does not have to open then close the file every time. Also make the media_id be able to be a int not just str.
 def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float:
@@ -398,14 +397,14 @@ def get_runtime(import_location:str, media_id:str) -> int:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","known_for_department","profile_path","popularity"]) -> list[dict]:
+def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","known_for_department","profile_path","popularity","id"]) -> list[dict]:
     """
     Gets the casting credits for the media.
     
     Args:
         import_location (str): Location for the .json file with the movie data.
         media_id (str): The media you want the income for.
-        info_wanted (str): The information wanted. (Supported parameters: `name` gives the actor's name, `gender` gets the actor's gender (`0` = not set / not specified. `1` = female. `2` = male. `3` = non-binary.), `known_for_department` gives the usual department the person works with, `popularity` gives the actor's pupularity score, `profile_path` gives the URL for their image.)
+        info_wanted (str): The information wanted. (Supported parameters: `name` gives the actor's name, `gender` gets the actor's gender (`0` = not set / not specified. `1` = female. `2` = male. `3` = non-binary.), `known_for_department` gives the usual department the person works with, `popularity` gives the actor's pupularity score, `profile_path` gives the URL for their image, `id` TMDB id.)
     Returns:
         list[dict]: List of dictionaries, each index in the list is an actor, each dictionary is a K:V pair for their info 
     """
@@ -424,14 +423,14 @@ def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","g
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","job","department","known_for_department","profile_path","popularity"]) -> list[dict]:
+def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","job","department","known_for_department","profile_path","popularity","id"]) -> list[dict]:
     """
     Gets the crew credits for the media.
     
     Args:
         import_location (str): Location for the .json file with the movie data.
         media_id (str): The media you want the income for.
-        info_wanted (str): The information wanted. (Supported parameters: `name` gives the person's name, `gender` gets the person's gender (`0` = not set / not specified. `1` = female. `2` = male. `3` = non-binary.),`job` gives the job the person did on the media `department` gives the department the person worked with, `known_for_department` gives the usual department the person works with, `popularity` gives the person's pupularity score, `profile_path` gives a URL for an image of them.)
+        info_wanted (str): The information wanted. (Supported parameters: `name` gives the person's name, `gender` gets the person's gender (`0` = not set / not specified. `1` = female. `2` = male. `3` = non-binary.),`job` gives the job the person did on the media `department` gives the department the person worked with, `known_for_department` gives the usual department the person works with, `popularity` gives the person's pupularity score, `profile_path` gives a URL for an image of them, `id` TMDB id.)
     Returns:
         list[dict]: List of dictionaries, each index in the list is a person, each dictionary is a K:V pair for their info 
     """
