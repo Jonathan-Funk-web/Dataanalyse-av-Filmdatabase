@@ -1,0 +1,66 @@
+Table media {
+  id integer [primary key]
+  title varchar
+  budget integer
+  revenue integer
+  popularity float
+  images varchar [note: "the images are going to be used for the part of the project where I will use graphs, and instead of just having the name of the people show up in the graphs, I will use images of them in adtition."]
+  origin_country varchar
+  spoken_languages varchar
+  release_date datetime
+  runtime integer
+}
+
+Table people {
+  id integer [primary key]
+  popularity float
+  name varchar
+  images varchar [note: "the images are going to be used for the part of the project where I will use graphs, and instead of just having the name of the people show up in the graphs, I will use images of them in adtition."]
+  gender integer
+  department varchar
+  known_for_department varchar
+  job varchar
+}
+
+Table production_companies {
+  id integer [primary key]
+  logo varchar
+  name varchar
+  country varchar [note: "Country of origin"]
+}
+
+Table media_people {
+  id integer [primary key]
+  media_id integer [ref: > media.id]
+  person_id integer [ref: > people.id]
+  role varchar [note: "e.g., Actor, Director, Writer"]
+}
+
+Table media_production_companies {
+  id integer [primary key]
+  media_id integer [ref: > media.id]
+  company_id integer [ref: > production_companies.id]
+}
+
+Table genres {
+  id integer [primary key]
+  name varchar [unique]
+}
+
+Table media_genres {
+  id integer [primary key]
+  media_id integer [ref: > media.id]
+  genre_id integer [ref: > genres.id]
+}
+
+
+Table keywords {
+  id integer [primary key]
+  name varchar [unique]
+}
+
+Table media_keywords {
+  id integer [primary key]
+  media_id integer [ref: > media.id]
+  keywords_id integer [ref: > keywords.id]
+}

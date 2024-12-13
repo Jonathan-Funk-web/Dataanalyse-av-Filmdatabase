@@ -7,10 +7,16 @@ And also a few other things I find would be interesting to know about.
 
 I am going to have the data i use saved as .json files, and plan on making graphs with matplot.lib or something similar near the end to visualise the data. 
 
+
+This is also my first proper project, so there will most likely be a few mistakes, both when it comes to coding and coding practices. (And also potentially words used, like "Schema" etc. but this is indeed a learning journey.)
+
 ## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [License](#license)
+- [Data analasys of The Movie Database](#data-analasys-of-the-movie-database)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Database info](#database-info)
+  - [Usage](#usage)
+  - [License](#license)
 
 ## Installation
 1. Clone the repository:
@@ -22,6 +28,10 @@ I am going to have the data i use saved as .json files, and plan on making graph
 ```bash
  pip install requests dotenv
  ```
+
+## Database info
+So while this project is very much me figuring out how to do stuff like this, I figured out that I should use a DBR Schema (DataBase Relationship). So here is the Schema for the project: ![DBR Schema](DBRSchema.png "DBR Schema") (Was made with https://dbdiagram.io/. you can find the code for the schema in `DBRSchema.txt` (I was unsure about the file extension to use.))
+
 
 ## Usage
 Sadly in this state it is still under development where it is not functional yet, but it will be soon™
