@@ -1,4 +1,5 @@
 import os,os.path,requests,json,sys
+from pathlib import Path
 from dotenv import load_dotenv 
 
 { #notes
@@ -61,7 +62,7 @@ def get_data(url: str, export_location: str="newdata.json", write: bool=True) ->
         str: All the data on the .json file.
     """
     #Chacks if we have the data beforehand.
-    if os.path.exists(os.path.join(export_location)):
+    if os.path.exists(Path(export_location)):
         print("(get_data) Data already exists, skipping request and writing.")
         return
 
@@ -82,14 +83,13 @@ def get_data(url: str, export_location: str="newdata.json", write: bool=True) ->
         sys.exit("(get_data) API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
     
     if write:
-        if not os.path.exists(os.path.join("Data")):
-            os.makedirs(os.path.join("Data"))
-        with open(os.path.join(export_location), "w") as f:
+        if not os.path.exists(Path("Data")):
+            os.makedirs(Path("Data"))
+        with open(Path(export_location), "w") as f:
             f.write(response_text_formatted)
-            print("(get_data) Writing data to file: %s" % (os.path.join(export_location)))
+            print("(get_data) Writing data to file: %s" % (Path(export_location)))
     
     return response_text
-
 
 def filter_basic_data(import_location: str, filter: list) -> str:
     """
@@ -102,8 +102,10 @@ def filter_basic_data(import_location: str, filter: list) -> str:
     Returns:
         str: Location for the new .json file.
     """
+    print(import_location)
+    print(Path(import_location))
     filtered_data = []
-    with open(import_location, "r") as file:
+    with open(export_location, "r") as file:
         data = json.load(file)
 
     for item in data["results"]:#Adds the media to a dict
@@ -117,7 +119,7 @@ def filter_basic_data(import_location: str, filter: list) -> str:
     #Trimming the location string
     export_location = import_location[import_location.find('/') + 1:-5]
     
-    with open("Data/filtered_" + export_location + ".json", "w") as f:
+    with open("ata/filtered_" + export_location + ".json"), "w" as f:
         json.dump(filtered_dict, f, indent=4)
     f.close()
 
@@ -477,4 +479,3 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-get_data(url_get_movies,"Data/data.json")
