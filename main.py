@@ -49,7 +49,7 @@ url_get_people_list = "https://api.themoviedb.org/3/person/changes?page=1"
 url_get_movie_details = "https://api.themoviedb.org/3/movie/"
 
 #TODO: Work on going through the pages for the api search. Use a loop and change the url with it
-def get_data(url: str, export_location: str="newdata.json", write: bool=True) -> str:
+def get_data(url: str, export_location: str="Data/data.json", write: bool=True) -> str:
     """
     Gets data from TMDB's API and returns it as a .json file at export_location.
     
@@ -102,12 +102,11 @@ def filter_basic_data(import_location: str, filter: list) -> str:
     Returns:
         str: Location for the new .json file.
     """
-    print(import_location)
-    print(Path(import_location))
-    filtered_data = []
-    with open(export_location, "r") as file:
-        data = json.load(file)
 
+    import_location = Path(import_location) # Maks the directory path complient with the os.
+    filtered_data = []
+    with open(import_location, "r") as file:
+        data = json.load(file)
     for item in data["results"]:#Adds the media to a dict
         filtered_dict = {}  
         for info in filter:  
@@ -116,14 +115,16 @@ def filter_basic_data(import_location: str, filter: list) -> str:
         if filtered_dict:
             filtered_data.append(filtered_dict)
     filtered_dict = {d['id']: d for d in filtered_data}
-    #Trimming the location string
-    export_location = import_location[import_location.find('/') + 1:-5]
-    
-    with open("ata/filtered_" + export_location + ".json"), "w" as f:
+
+    export_location = os.path.join(os.path.dirname(import_location),"Filtered_"+os.path.basename(import_location)) #Adds `Filtered_` to the export file
+    print(export_location)
+
+    with open(export_location, "w") as f:
         json.dump(filtered_dict, f, indent=4)
     f.close()
 
-    return "Data/filtered_" + export_location + ".json"
+
+    return export_location
 
 def get_extra_media_data(import_location: str) -> None:
     """
@@ -479,3 +480,4 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
+get_data(url_get_movies,"Data/data.json")
