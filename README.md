@@ -34,7 +34,7 @@ So while this project is very much me figuring out how to do stuff like this, I 
 
 
 ## Usage
-Sadly in this state it is still under development where it is not functional yet, but it will be soon™
+To start, get the basic unfiltered data with running `get_data(url_get_movies)`
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
