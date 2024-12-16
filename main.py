@@ -1,6 +1,7 @@
 import os,os.path,requests,json,sys
 from dotenv import load_dotenv 
 
+{ #notes
 ### THE TASK ###
 """
 Do data analasys of the following:
@@ -32,11 +33,11 @@ Do data analasys of the following:
 - API Pagination
 - make the get_genre_scoere()
 - make all my code consistent (it is ugly atm :( )
-"""
+""" }
 #Data to whitelest from the .json
 data_wanted = ["title","original_title","genres","keywords","origin_country","original_language","spoken_languages","budget","revenue","production_companies","production_countries","credits","release_date","status","runtime","popularity","vote_average","vote_count"]
 credits_data_wanted = ["gender","known_for_department","name","popularity"]
-last_date_checked = 0
+last_date_checked = 0 
 
 
 #API request 
@@ -59,6 +60,11 @@ def get_data(url: str, export_location: str="newdata.json", write: bool=True) ->
     Returns:
         str: All the data on the .json file.
     """
+    #Chacks if we have the data beforehand.
+    if os.path.exists(os.path.join(export_location)):
+        print("(get_data) Data already exists, skipping request and writing.")
+        return
+
     #API key security
     load_dotenv() 
     Auth_key = os.getenv("MOVIEDB_APP_AUTH_DOMAIN")
@@ -73,11 +79,14 @@ def get_data(url: str, export_location: str="newdata.json", write: bool=True) ->
     response_text_formatted = json.dumps(response_text, indent=4)
     #Error handling
     if not response_text.get("success", True):
-        sys.exit("API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
+        sys.exit("(get_data) API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
     
     if write:
-        with open(export_location, "w") as f:
+        if not os.path.exists(os.path.join("Data")):
+            os.makedirs(os.path.join("Data"))
+        with open(os.path.join(export_location), "w") as f:
             f.write(response_text_formatted)
+            print("(get_data) Writing data to file: %s" % (os.path.join(export_location)))
     
     return response_text
 
@@ -114,7 +123,6 @@ def filter_basic_data(import_location: str, filter: list) -> str:
 
     return "Data/filtered_" + export_location + ".json"
 
-
 def get_extra_media_data(import_location: str) -> None:
     """
     Uses TMDB's API to get all info about given media.
@@ -135,7 +143,7 @@ def get_extra_media_data(import_location: str) -> None:
     file.close()
 
 def filter_non_basic_data(import_location:str) -> None:
-    return
+    ...
 
 #TODO make it so that these functions does not have to open then close the file every time. Also make the media_id be able to be a int not just str.
 def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float:
@@ -469,4 +477,4 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-print(get_keywords("Data/extra_media_details.json","912649"))
+get_data(url_get_movies,"Data/data.json")
