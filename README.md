@@ -30,7 +30,7 @@ This is also my first proper project, so there will most likely be a few mistake
  ```
 
 ## Database info
-So while this project is very much me figuring out how to do stuff like this, I figured out that I should use a DBR Schema (DataBase Relationship). So here is the Schema for the project: ![DBR Schema](DBRSchema.png "DBR Schema") (Was made with https://dbdiagram.io/. you can find the code for the schema in `DBRSchema.txt` (I was unsure about the file extension to use.))
+So while this project is very much me figuring out how to do stuff like this, I figured out that I should use a DBR Schema (DataBase Relationship). So here is the Schema for the project: ![DBR Schema](DBRSchema.png "DBR Schema") (Was made with https://dbdiagram.io/. You can find the code for the schema in `DBRSchema.txt` (I was unsure about the file extension to use.))
 
 
 ## Usage
