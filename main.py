@@ -63,7 +63,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     """
     #Chacks if we have the data beforehand.
     if os.path.exists(Path(export_location)):
-        print("(get_data) Data already exists, skipping request and writing.")
+        print("\n(Error in get_data)\n Data already exists, skipping request and writing\n\n")
         return
 
     #API key security
@@ -91,7 +91,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     
     return response_text
 
-def filter_basic_data(import_location: str, filter: list) -> str:
+def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
     """
     Filters the .json data from import_location, if the .json has a object with a name that is on the whitelist filter it is copied over for the next file. If it is not it is ignored.
     When finished, it exports it to the same directory but with the prefix `filtered_` to its name.
@@ -103,13 +103,20 @@ def filter_basic_data(import_location: str, filter: list) -> str:
         str: Location for the new .json file.
     """
 
+    try:
+        filter[0]
+    except:
+        print("\n(Error in filter_basic_data)\n Filter cant be empty\n\n")
+
+    print("\n\nFiltering %s with whitelist-filter %s\n│" % (import_location,filter))
     import_location = Path(import_location) # Maks the directory path complient with the os.
     filtered_data = []
     with open(import_location, "r") as file:
         data = json.load(file)
+    print("├ " + str(import_location) + " loaded!")
     for item in data["results"]:#Adds the media to a dict
         filtered_dict = {}  
-        for info in filter:  
+        for info in filter:
             if str(info) in item:  
                 filtered_dict[info] = item[str(info)]
         if filtered_dict:
@@ -480,4 +487,4 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-get_data(url_get_movies,"Data/data.json")
+filter_basic_data("Data\data.json",["id"])
