@@ -61,10 +61,11 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     Returns:
         str: All the data on the .json file.
     """
+    print("┌Starting get_data(%s)" % url)
     #Chacks if we have the data beforehand.
     if os.path.exists(Path(export_location)):
-        print("\n(Error in get_data)\n Data already exists, skipping request and writing\n\n")
-        return
+        print("├(Error in get_data)\n├─Data already exists, skipping request and writing\n│")
+        pass
 
     #API key security
     load_dotenv() 
@@ -80,16 +81,20 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     response_text_formatted = json.dumps(response_text, indent=4)
     #Error handling
     if not response_text.get("success", True):
-        sys.exit("(get_data) API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
+        sys.exit("└API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
     
     if write:
         if not os.path.exists(Path("Data")):
+            print("├Did not find dir named Data")
             os.makedirs(Path("Data"))
+            print("├Dir Data made")
         with open(Path(export_location), "w") as f:
             f.write(response_text_formatted)
-            print("(get_data) Writing data to file: %s" % (Path(export_location)))
-    
-    return response_text
+            print("├Writing data to file: %s" % (Path(export_location)))
+        print("├returning response text")
+
+    print("└get_data(%s) done!\n\n" % url)
+    return response
 
 def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
     """
@@ -154,6 +159,17 @@ def get_extra_media_data(import_location: str) -> None:
 
 def filter_non_basic_data(import_location:str) -> None:
     ...
+
+def gather_data():
+    """Reccomended way to get the data files. It first checks if your API key is valid, then it uses `get_data` to get basic data, then it filters it for its `it` and `title`. It then runs `get_extra_media_data` to get extra detailed data, it then also runs `filter detailed data`.
+    """
+    get_data(url_auth,Path("Data/auth_check.json"))
+    
+    with open(Path("Data/auth_check.json"), "r") as file:
+        auth_check = json.load(file)
+    if auth_check["success"] == True:
+        print("Auth successful")
+
 
 #TODO make it so that these functions does not have to open then close the file every time. Also make the media_id be able to be a int not just str.
 def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float:
@@ -487,4 +503,4 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-filter_basic_data("Data\data.json",["id"])
+gather_data()
