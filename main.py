@@ -66,8 +66,6 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     """
     logging.debug("Starting get_data(%s)" % url)
     #Chacks if we have the data beforehand.
-    if os.path.exists(Path(export_location)):
-        logging.warning(str(Path("Data")) + " already exists")
 
 
     #API key security
