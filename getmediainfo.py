@@ -258,7 +258,6 @@ def get_runtime(import_location:str, media_id:str) -> int:
 
     return data[media_id]["Details"]["runtime"]
 
-
 def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","known_for_department","profile_path","popularity","id"]) -> list[dict]:
     """
     Gets the casting credits for the media.
@@ -281,8 +280,6 @@ def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","g
             actor_list.append(actor)
             actor = {}
         return actor_list
-
-
 
 def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","job","department","known_for_department","profile_path","popularity","id"]) -> list[dict]:
     """
@@ -307,8 +304,6 @@ def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","g
             crew = {}
         return crew_list
 
-
-
 def get_keywords(import_location:str, media_id:str) -> list[str]:
     """
     Gets the keywords for the media.
@@ -326,5 +321,3 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
     for i in range(len(data[media_id]["Details"]["keywords"]["keywords"])):
         keywords.append(data[media_id]["Details"]["keywords"]["keywords"][i]["name"])
     return keywords
-
-
