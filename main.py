@@ -83,7 +83,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     response_text_formatted = json.dumps(response_text, indent=4)
     #Error handling
     if not response_text.get("success", True):
-        logging.CRITICAL("API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
+        logging.critical("API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
         return
     
     if write:
@@ -97,7 +97,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
         logging.info("returning response text")
 
     logging.info("get_data(%s) done!" % url)
-    return response
+    return response_text
 
 def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
     """
@@ -114,14 +114,14 @@ def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
     try:
         filter[0]
     except:
-        print("\n(Error in filter_basic_data)\n Filter cant be empty\n\n")
+        logging.warning("Filter cant be empty")
 
-    print("\n\nFiltering %s with whitelist-filter %s\n│" % (import_location,filter))
+    print("Filtering %s with whitelist-filter %s" % (import_location,filter))
     import_location = Path(import_location) # Maks the directory path complient with the os.
     filtered_data = []
     with open(import_location, "r") as file:
         data = json.load(file)
-    print("├ " + str(import_location) + " loaded!")
+    print(str(import_location) + " loaded!")
     for item in data["results"]:#Adds the media to a dict
         filtered_dict = {}  
         for info in filter:
@@ -132,7 +132,6 @@ def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
     filtered_dict = {d['id']: d for d in filtered_data}
 
     export_location = os.path.join(os.path.dirname(import_location),"Filtered_"+os.path.basename(import_location)) #Adds `Filtered_` to the export file
-    print(export_location)
 
     with open(export_location, "w") as f:
         json.dump(filtered_dict, f, indent=4)
@@ -141,24 +140,24 @@ def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
 
     return export_location
 
-def get_extra_media_data(import_location: str) -> None:
+def get_extra_media_data(import_location: str,export_location: str = "Data/detailed_media.json") -> None:
     """
     Uses TMDB's API to get all info about given media.
-
+.
     Arg:
         import_location (str): The location for the .json file to gather data from.
     """
-
     with open(import_location, "r") as file:
         data = json.load(file)
 
     for item in data:
-        Details = get_data(url_get_movie_details+item+"?append_to_response=credits%2Ckeywords&language=en-US","TEST",write=False)        
+        print(item)
+        Details = get_data(url_get_movie_details+item+"?append_to_response=credits%2Ckeywords&language=en-US",write=False)        
         data[item].update({"Details": Details})
-
-    with open("Data/extra_media_details.json", "w") as file:
+    with open(Path(export_location), "w") as file:
         json.dump(data, file, indent=4)
     file.close()
+    return
 
 def filter_non_basic_data(import_location:str) -> None:
     ...
@@ -530,3 +529,4 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
 
+get_extra_media_data(Path("Data\Filtered_data.json"))
