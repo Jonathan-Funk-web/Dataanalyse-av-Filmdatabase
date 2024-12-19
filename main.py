@@ -1,4 +1,4 @@
-import os,os.path,requests,json,sys
+import os,os.path,requests,json,sys,logging
 from pathlib import Path
 from dotenv import load_dotenv 
 
@@ -40,6 +40,8 @@ data_wanted = ["title","original_title","genres","keywords","origin_country","or
 credits_data_wanted = ["gender","known_for_department","name","popularity"]
 last_date_checked = 0 
 
+#Setting up logger:
+logging.basicConfig(format="TIME: %(asctime)s | LINE: %(lineno)s | %(levelname)s -> %(message)s")
 
 #API request 
 url_auth = "https://api.themoviedb.org/3/authentication"
@@ -169,6 +171,37 @@ def gather_data():
         auth_check = json.load(file)
     if auth_check["success"] == True:
         print("Auth successful")
+
+def set_api_key(key:str) -> bool:
+    """
+    Saves the API key in a .env file. (MAKE SURE TO ADD .env TO YOUR .gitignore FILE IF YOU HAVE NOT DONE SO ALLREADY)
+    
+    Args:
+        key (str): API key.
+    Returns:
+        bool: Wether the API key works or not.
+    """
+    logging.info("Setting API key")
+    f = open(".env", "w")
+    f.write("MOVIEDB_APP_AUTH_DOMAIN=" + key)
+    logging.info("API key set")
+    logging.debug("Testing if API key works")
+    f.close()
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer " + key
+    }
+
+    response = requests.get("https://api.themoviedb.org/3/authentication", headers=headers)
+
+    if json.loads(response.text)["success"]:
+        logging.info("API is working")
+    else:
+        logging.error("Your API key is not valid")
+    logging.info("test")
+    
+    return json.loads(response.text)["success"]
 
 
 #TODO make it so that these functions does not have to open then close the file every time. Also make the media_id be able to be a int not just str.
@@ -503,4 +536,5 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
 
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
-gather_data()
+
+set_api_key("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NDMzZWU5MzAyM2EyZjAyY2UyN2ZjZTRkYmFjZjhiMiIsIm5iZiI6MTczMDcxMTI5My4yNzgsInN1YiI6IjY3Mjg4ZWZkNTkxODEzN2NmYzM5YjY1YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MSNRp5FRiFbxZkHq1xmvhT5Fdp5KlHg1398tztcqnkw")
