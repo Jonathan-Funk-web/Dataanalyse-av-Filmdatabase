@@ -34,8 +34,7 @@ So while this project is very much me figuring out how to do stuff like this, I 
 
 
 ## Usage
-1. First Make a `.env` file with `MOVIEDB_APP_AUTH_DOMAIN=[YOUR API KEY FROM THE MOVIE DATABASE HERE]`
-2. get the basic unfiltered data with running `get_data(url_get_movies)`
+run the function `startup`.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
