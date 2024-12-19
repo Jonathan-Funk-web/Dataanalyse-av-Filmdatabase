@@ -63,11 +63,11 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     Returns:
         str: All the data on the .json file.
     """
-    print("┌Starting get_data(%s)" % url)
+    logging.debug("Starting get_data(%s)" % url)
     #Chacks if we have the data beforehand.
     if os.path.exists(Path(export_location)):
-        print("├(Error in get_data)\n├─Data already exists, skipping request and writing\n│")
-        pass
+        logging.warning(str(Path("Data")) + " already exists")
+
 
     #API key security
     load_dotenv() 
@@ -83,19 +83,20 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     response_text_formatted = json.dumps(response_text, indent=4)
     #Error handling
     if not response_text.get("success", True):
-        sys.exit("└API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
+        logging.CRITICAL("API connection failed, error: %s\n%s" % (response_text["status_code"],response_text["status_message"]))
+        return
     
     if write:
         if not os.path.exists(Path("Data")):
-            print("├Did not find dir named Data")
+            logging.info("Did not find dir named Data")
             os.makedirs(Path("Data"))
-            print("├Dir Data made")
+            logging.info("Dir Data made")
         with open(Path(export_location), "w") as f:
             f.write(response_text_formatted)
-            print("├Writing data to file: %s" % (Path(export_location)))
-        print("├returning response text")
+            logging.debug("Writing data to file: %s" % (Path(export_location)))
+        logging.info("returning response text")
 
-    print("└get_data(%s) done!\n\n" % url)
+    logging.info("get_data(%s) done!" % url)
     return response
 
 def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
