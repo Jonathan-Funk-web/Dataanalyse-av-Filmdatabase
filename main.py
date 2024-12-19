@@ -162,15 +162,8 @@ def get_extra_media_data(import_location: str) -> None:
 def filter_non_basic_data(import_location:str) -> None:
     ...
 
-def gather_data():
-    """Reccomended way to get the data files. It first checks if your API key is valid, then it uses `get_data` to get basic data, then it filters it for its `it` and `title`. It then runs `get_extra_media_data` to get extra detailed data, it then also runs `filter detailed data`.
-    """
-    get_data(url_auth,Path("Data/auth_check.json"))
-    
-    with open(Path("Data/auth_check.json"), "r") as file:
-        auth_check = json.load(file)
-    if auth_check["success"] == True:
-        print("Auth successful")
+def startup():
+    ...
 
 def set_api_key(key:str) -> bool:
     """
@@ -199,7 +192,6 @@ def set_api_key(key:str) -> bool:
         logging.info("API is working")
     else:
         logging.error("Your API key is not valid")
-    logging.info("test")
     
     return json.loads(response.text)["success"]
 
@@ -537,4 +529,3 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
     #This is not meatn to be a function, just a template to quickly make new "get_..." functions
 
 
-set_api_key("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NDMzZWU5MzAyM2EyZjAyY2UyN2ZjZTRkYmFjZjhiMiIsIm5iZiI6MTczMDcxMTI5My4yNzgsInN1YiI6IjY3Mjg4ZWZkNTkxODEzN2NmYzM5YjY1YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MSNRp5FRiFbxZkHq1xmvhT5Fdp5KlHg1398tztcqnkw")
