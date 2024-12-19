@@ -100,7 +100,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     logging.info("get_data(%s) done!" % url)
     return response_text
 
-def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
+def filter_basic_data(import_location: str="Data/data.json", filter: list=["id"]) -> str:
     """
     Filters the .json data from import_location, if the .json has a object with a name that is on the whitelist filter it is copied over for the next file. If it is not it is ignored.
     When finished, it exports it to the same directory but with the prefix `filtered_` to its name.
@@ -123,7 +123,7 @@ def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
     with open(import_location, "r") as file:
         data = json.load(file)
     print(str(import_location) + " loaded!")
-    for item in data["results"]:#Adds the media to a dict
+    for item in data["results"]: # Adds the media to a dict
         filtered_dict = {}  
         for info in filter:
             if str(info) in item:  
@@ -132,7 +132,7 @@ def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
             filtered_data.append(filtered_dict)
     filtered_dict = {d['id']: d for d in filtered_data}
 
-    export_location = os.path.join(os.path.dirname(import_location),"Filtered_"+os.path.basename(import_location)) #Adds `Filtered_` to the export file
+    export_location = os.path.join(os.path.dirname(import_location),"Filtered_"+os.path.basename(import_location)) # Adds `Filtered_` to the export file
 
     with open(export_location, "w") as f:
         json.dump(filtered_dict, f, indent=4)
@@ -141,7 +141,7 @@ def filter_basic_data(import_location: str, filter: list=["id"]) -> str:
 
     return export_location
 
-def get_extra_media_data(import_location: str,export_location: str = "Data/detailed_media.json") -> None:
+def get_extra_media_data(import_location: str,export_location: str = "Data/detailed_media_data.json") -> None:
     """
     Uses TMDB's API to get all info about given media.
 .
@@ -161,9 +161,6 @@ def get_extra_media_data(import_location: str,export_location: str = "Data/detai
     return
 
 def filter_non_basic_data(import_location:str) -> None:
-    ...
-
-def startup():
     ...
 
 def set_api_key(key:str) -> bool:
@@ -196,4 +193,24 @@ def set_api_key(key:str) -> bool:
     
     return json.loads(response.text)["success"]
 
-print(gmi.get_genres(Path(r"Data\detailed_media.json"),"845781"))
+def startup(key:str):
+    """
+    Gives you the data in a quick and easy way.
+
+    Args: 
+        key(str): Your TMDB API key. 
+    """
+    
+
+    print("Setting up API key.")
+    if set_api_key(key):
+        print("API key set successfully.")
+    else:
+        sys.exit("Failed to set API key.")
+    get_data(url_get_movies)
+    get_extra_media_data(filter_basic_data())
+    os.remove(Path("Data\data.json"))
+    os.remove(Path("Data\Filtered_data.json"))
+
+
+
