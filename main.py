@@ -98,7 +98,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     logging.info("get_data(%s) done!" % url)
     return response_text
 
-def filter_basic_data(import_location: str="Data/data.json", filter: list=["id"]) -> str:
+def filter_basic_data(import_location: str="Data/data.json", filter: list=["id","title"]) -> str:
     """
     Filters the .json data from import_location, if the .json has a object with a name that is on the whitelist filter it is copied over for the next file. If it is not it is ignored.
     When finished, it exports it to the same directory but with the prefix `filtered_` to its name.
@@ -150,13 +150,16 @@ def get_extra_media_data(import_location: str,export_location: str = "Data/detai
         data = json.load(file)
 
     for item in data:
-        print(item)
         Details = get_data(url_get_movie_details+item+"?append_to_response=credits%2Ckeywords&language=en-US",write=False)        
-        data[item].update({"Details": Details})
+        data[item].update(Details)
+        print(data[item]["title"])
+
+        
     with open(Path(export_location), "w") as file:
         json.dump(data, file, indent=4)
-    file.close()
     return
+
+
 
 def filter_non_basic_data(import_location:str) -> None:
     ...
@@ -207,8 +210,12 @@ def startup(key:str):
         sys.exit("Failed to set API key.")
     get_data(url_get_movies)
     get_extra_media_data(filter_basic_data())
-    os.remove(Path("Data\data.json"))
-    os.remove(Path("Data\Filtered_data.json"))
+    if os.path.exists(Path(r"Data\data.json")):
+        os.remove(Path(r"Data\data.json"))
+    if os.path.exists(Path(r"Data\Filtered_data.json")):
+        os.remove(Path(r"Data\Filtered_data.json"))
+    
 
 
 
+# print(type(gmi.get_votes(r"Data\detailed_media_data.json","845781")))
