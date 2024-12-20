@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 
-def load_json(import_location:str) -> dict:
+def load_json(import_location:str)->dict:
     """
     Used by the other functions in this module to open the `import_location`
     Args:
@@ -282,14 +282,14 @@ def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","g
 
     data = load_json(import_location)
 
+    actor = {}
+    actor_list = []
+    for i in range(len(data[media_id]["Details"]["credits"]["cast"])):
+        for info in info_wanted:
+            actor.update({info:data[media_id]["Details"]["credits"]["cast"][i][info]})
+        actor_list.append(actor)
         actor = {}
-        actor_list = []
-        for i in range(len(data[media_id]["Details"]["credits"]["cast"])):
-            for info in info_wanted:
-                actor.update({info:data[media_id]["Details"]["credits"]["cast"][i][info]})
-            actor_list.append(actor)
-            actor = {}
-        return actor_list
+    return actor_list
 
 def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","gender","job","department","known_for_department","profile_path","popularity","id"]) -> list[dict]:
     """
@@ -305,14 +305,14 @@ def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","g
 
     data = load_json(import_location)
 
+    crew = {}
+    crew_list = []
+    for i in range(len(data[media_id]["Details"]["credits"]["crew"])):
+        for info in info_wanted:
+            crew.update({info:data[media_id]["Details"]["credits"]["crew"][i][info]})
+        crew_list.append(crew)
         crew = {}
-        crew_list = []
-        for i in range(len(data[media_id]["Details"]["credits"]["crew"])):
-            for info in info_wanted:
-                crew.update({info:data[media_id]["Details"]["credits"]["crew"][i][info]})
-            crew_list.append(crew)
-            crew = {}
-        return crew_list
+    return crew_list
 
 def get_keywords(import_location:str, media_id:str) -> list[str]:
     """
