@@ -46,20 +46,35 @@ def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float
     else:
         return this_media_vote_average
 
-def get_income(import_location:str, media_id:str) -> float:
+def get_budget(import_location:str, media_id:str) -> float:
     """
-    Finds the income for media
+    Finds the budget for media
     
     Args:
         import_location (str): Location for the .json file with the movie data.
-        media_id (str): The media you want the income for.
+        media_id (str): The media you want the budget for.
     
     Returns:
-        float: Total income for a movie (revenue - budget).
+        float: Total budget for a movie.
     """
     data = load_json(import_location)
 
-    return data[media_id]["revenue"] - data[media_id]["budget"]
+    return data[media_id]["budget"]
+
+def get_revenue(import_location:str, media_id:str) -> float:
+    """
+    Finds the revenue for media
+    
+    Args:
+        import_location (str): Location for the .json file with the movie data.
+        media_id (str): The media you want the revenue for.
+    
+    Returns:
+        float: Revenue for a movie.
+    """
+    data = load_json(import_location)
+
+    return data[media_id]["revenue"]
 
 def get_title(import_location:str, media_id:str, mode:int=0) -> str | bool:
     """
