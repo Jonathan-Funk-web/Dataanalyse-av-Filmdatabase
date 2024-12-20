@@ -37,8 +37,6 @@ Do data analasys of the following:
 - make all my code consistent (it is ugly atm :( )
 """ }
 #Data to whitelest from the .json
-data_wanted = ["title","original_title","genres","keywords","origin_country","original_language","spoken_languages","budget","revenue","production_companies","production_countries","credits","release_date","status","runtime","popularity","vote_average","vote_count"]
-credits_data_wanted = ["gender","known_for_department","name","popularity"]
 last_date_checked = 0 
 
 #Setting up logger:
@@ -118,8 +116,8 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
     print("Filtering %s with whitelist-filter %s" % (import_location,filter))
     import_location = Path(import_location) # Maks the directory path complient with the os.
     filtered_data = []
-    with open(import_location, "r") as file:
-        data = json.load(file)
+    data = gmi.load_json(import_location)
+
     print(str(import_location) + " loaded!")
     for item in data["results"]: # Adds the media to a dict
         filtered_dict = {}  
@@ -134,7 +132,6 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
 
     with open(export_location, "w") as f:
         json.dump(filtered_dict, f, indent=4)
-    f.close()
 
 
     return export_location
@@ -142,12 +139,11 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
 def get_extra_media_data(import_location: str,export_location: str = "Data/detailed_media_data.json") -> None:
     """
     Uses TMDB's API to get all info about given media.
-.
     Arg:
         import_location (str): The location for the .json file to gather data from.
     """
-    with open(import_location, "r") as file:
-        data = json.load(file)
+    data = gmi.load_json(import_location)
+
 
     for item in data:
         Details = get_data(url_get_movie_details+item+"?append_to_response=credits%2Ckeywords&language=en-US",write=False)        
@@ -161,8 +157,48 @@ def get_extra_media_data(import_location: str,export_location: str = "Data/detai
 
 
 
-def filter_non_basic_data(import_location:str) -> None:
-    ...
+def filter_non_basic_data(import_location: str=r"Data/detailed_media_data.json",export_location: str=r"Data/data.json"):
+    """
+    Finalises the data before it gets the analasis.
+
+    Args:
+        import_location (str): Import location for the .json file.
+        export_location (str): Export location for the .json file.
+    """
+
+    import_location = Path(import_location)
+    data = gmi.load_json(import_location)
+    media_dict = {}
+    for media in data:
+        media_dict.update({media:{}}) # Adds a empty dir for each media in the data.
+        for info in ["title","revenue","budget","popularity","genres","countries","languages","release_date","runtime","keywords","cast","crew"]:
+            media_dict[media].update({info: getattr(gmi, f"get_{info}")(import_location, media)})
+        
+        #Doing the data that needs extra parametres here:
+        
+        #Languages spoken in the media
+        media_dict[media].update({"spoken_languages":gmi.get_languages(import_location,media,"spoken_languages")})
+
+        #Ratings
+        media_dict[media].update({"weighted_rating":gmi.get_votes(import_location,media,True)})
+        media_dict[media].update({"un_weighted_rating":gmi.get_votes(import_location,media,False)})
+
+        #Images
+        media_dict[media].update({"poster_url":gmi.get_images(import_location,media,image_type="poster")})
+        media_dict[media].update({"backdrop_url":gmi.get_images(import_location,media,image_type="backdrop")})
+        
+        #Production
+        media_dict[media].update({"production_companies":[]})
+        media_dict[media]["production_companies"].append(gmi.get_production(import_location,media,info_wanted="name_list"))
+
+
+
+    with open(export_location, "w") as f:
+        json.dump(media_dict, f, indent=4)
+
+
+    return 
+
 
 def set_api_key(key:str) -> bool:
     """
@@ -194,7 +230,7 @@ def set_api_key(key:str) -> bool:
     
     return json.loads(response.text)["success"]
 
-def startup(key:str):
+def startup(key:str) -> None:
     """
     Gives you the data in a quick and easy way.
 
@@ -214,8 +250,5 @@ def startup(key:str):
         os.remove(Path(r"Data\data.json"))
     if os.path.exists(Path(r"Data\Filtered_data.json")):
         os.remove(Path(r"Data\Filtered_data.json"))
-    
 
-
-
-# print(type(gmi.get_votes(r"Data\detailed_media_data.json","845781")))
+filter_non_basic_data(r"Data\detailed_media_data.json")
