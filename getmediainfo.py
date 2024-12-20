@@ -40,11 +40,11 @@ def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float
     this_media_vote_count = data[media_id]["vote_count"]
     weighted_factor = this_media_vote_count/all_media_highest_vote_amount
 
-    weighted_rating = round(weighted_factor*this_media_vote_average + (1-weighted_factor)*all_media_average_vote,2)
+    weighted_rating = weighted_factor*this_media_vote_average + (1-weighted_factor)*all_media_average_vote
     if weighted:
-        return weighted_rating
+        return round(weighted_rating,2)
     else:
-        return this_media_vote_average
+        return round(this_media_vote_average,2)
 
 def get_budget(import_location:str, media_id:str) -> float:
     """
@@ -295,12 +295,19 @@ def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","g
     """
 
     data = load_json(import_location)
-
+    image_url = "https://image.tmdb.org/t/p/original"
     actor = {}
     actor_list = []
     for i in range(len(data[media_id]["credits"]["cast"])):
         for info in info_wanted:
-            actor.update({info:data[media_id]["credits"]["cast"][i][info]})
+            if info == "profile_path":
+                profile_path = data[media_id]["credits"]["cast"][i].get(info, "")
+                if profile_path:
+                    actor.update({info: f"{image_url}{profile_path}"})
+                else:
+                    actor.update({info: None})  # In case profile_path is missing
+            else:
+                actor.update({info:data[media_id]["credits"]["cast"][i][info]})
         actor_list.append(actor)
         actor = {}
     return actor_list
@@ -318,12 +325,20 @@ def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","g
     """
 
     data = load_json(import_location)
-
+    base_url = "https://image.tmdb.org/t/p/original"
     crew = {}
     crew_list = []
     for i in range(len(data[media_id]["credits"]["crew"])):
         for info in info_wanted:
-            crew.update({info:data[media_id]["credits"]["crew"][i][info]})
+            if info == "profile_path":
+                # If profile_path exists, construct the full URL
+                profile_path = data[media_id]["credits"]["crew"][i].get(info, "")
+                if profile_path:
+                    crew.update({info: f"{base_url}{profile_path}"})
+                else:
+                    crew.update({info: None})  # In case profile_path is missing
+            else:
+                crew.update({info: data[media_id]["credits"]["crew"][i].get(info)})
         crew_list.append(crew)
         crew = {}
     return crew_list
