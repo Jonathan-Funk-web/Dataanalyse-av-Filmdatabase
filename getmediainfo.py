@@ -2,6 +2,17 @@ import json
 from pathlib import Path
 
 
+def load_json(import_location:str) -> dict:
+    """
+    Used by the other functions in this module to open the `import_location`
+    Args:
+        import_location (str): Location of the datafile to use.
+    Returns:
+        dict: .json file.
+    """
+    with open(Path(import_location), "r") as file:
+        return json.load(file)
+
 #TODO make it so that these functions does not have to open then close the file every time. Also make the media_id be able to be a int not just str.
 def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float:
     """
@@ -16,8 +27,7 @@ def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float
         float: rating
     """
     #I used this as a guideline https://math.stackexchange.com/questions/41459/how-can-i-calculate-most-popular-more-accurately/41513
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
 
     all_media_highest_vote_amount = 0
     all_media_average_vote = 0
@@ -31,7 +41,6 @@ def get_votes(import_location:str, media_id:str, weighted:bool = False) -> float
     weighted_factor = this_media_vote_count/all_media_highest_vote_amount
 
     weighted_rating = round(weighted_factor*this_media_vote_average + (1-weighted_factor)*all_media_average_vote,2)
-    file.close()
     if weighted:
         return weighted_rating
     else:
@@ -48,8 +57,8 @@ def get_income(import_location:str, media_id:str) -> float:
     Returns:
         float: Total income for a movie (revenue - budget).
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
     return data[media_id]["Details"]["revenue"] - data[media_id]["Details"]["budget"]
 
 def get_title(import_location:str, media_id:str, mode:int=0) -> str | bool:
@@ -63,8 +72,8 @@ def get_title(import_location:str, media_id:str, mode:int=0) -> str | bool:
     Returns:
         str: Title for the media.
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
     
     #assert mode not in [0,1,2], "Mode (third argument) was %s\nIt has to be either: 0 or 1 or 2" % mode
     if mode == 0:
@@ -74,7 +83,6 @@ def get_title(import_location:str, media_id:str, mode:int=0) -> str | bool:
     elif mode == 2:
         return data[media_id]["Details"]["title"] == data[media_id]["Details"]["original_title"]
 
-    #TODO figure out if i should place file.close() here or not
 
 def get_popularity(import_location:str, media_id:str) -> float:
     """
@@ -87,8 +95,8 @@ def get_popularity(import_location:str, media_id:str) -> float:
     Returns:
         float: Popularity Rating
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
 
     return data[media_id]["Details"]["popularity"]
 
@@ -103,8 +111,8 @@ def get_genres(import_location:str, media_id:str) -> list:
     Returns:
         list: Name of the genres. 
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
     
     genres = []
     for i in data[media_id]["Details"]["genres"]:
@@ -124,8 +132,8 @@ def get_images(import_location:str, media_id:str, image_type:str="poster", image
     Returns:
         str: Image URL
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
     image_type = image_type + "_path"
     if collection_image:
         if data[media_id]["Details"]["belongs_to_collection"] == None:
@@ -144,8 +152,8 @@ def get_countries(import_location:str, media_id:str) -> str:
     Returns:
         str: The country the media originates from.
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
 
     return data[media_id]["Details"]["origin_country"][0]
 
@@ -161,8 +169,8 @@ def get_languages(import_location:str, media_id:str, info_wanted:str="original_l
         str: Language in format `iso_639_1`.
         list[str]: Language in format `iso_639_1`.
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
     if info_wanted == "original_language":
         return data[media_id]["Details"]["original_language"]
     if info_wanted == "spoken_languages":
@@ -182,8 +190,8 @@ def get_popularity(import_location:str, media_id:str) -> float:
     Returns:
         float: Popularity rating
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
 
     return data[media_id]["Details"]["popularity"]
 
@@ -201,8 +209,8 @@ def get_production(import_location:str, media_id:str, info_wanted:str="name", co
         list[str]: Information wanted (if used `info_wanted=name_list` or `info_wanted=country_list`, country information is given in format `iso_3166_1`)
         int: Amount of companies (if used `info_wanted=amount`)
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
 
 
     if info_wanted == "logo":
@@ -239,8 +247,8 @@ def get_release_date(import_location:str, media_id:str) -> str:
     Returns:
         str: Release Date
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
 
     return data[media_id]["Details"]["release_date"]
 
@@ -255,8 +263,8 @@ def get_runtime(import_location:str, media_id:str) -> int:
     Returns:
         int: Runtime
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
 
     return data[media_id]["Details"]["runtime"]
 
@@ -272,8 +280,8 @@ def get_cast(import_location:str, media_id:str, info_wanted:list[str]=["name","g
         list[dict]: List of dictionaries, each index in the list is an actor, each dictionary is a K:V pair for their info 
     """
 
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
         actor = {}
         actor_list = []
         for i in range(len(data[media_id]["Details"]["credits"]["cast"])):
@@ -295,8 +303,8 @@ def get_crew(import_location:str, media_id:str, info_wanted:list[str]=["name","g
         list[dict]: List of dictionaries, each index in the list is a person, each dictionary is a K:V pair for their info 
     """
 
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
         crew = {}
         crew_list = []
         for i in range(len(data[media_id]["Details"]["credits"]["crew"])):
@@ -317,8 +325,8 @@ def get_keywords(import_location:str, media_id:str) -> list[str]:
     Returns:
         list[str]: List of the keywords.
     """
-    with open(Path(import_location), "r") as file:
-        data = json.load(file)
+    data = load_json(import_location)
+
     keywords = []
     for i in range(len(data[media_id]["Details"]["keywords"]["keywords"])):
         keywords.append(data[media_id]["Details"]["keywords"]["keywords"][i]["name"])
