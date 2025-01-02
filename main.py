@@ -251,4 +251,3 @@ def startup(key:str) -> None:
     if os.path.exists(Path(r"Data\Filtered_data.json")):
         os.remove(Path(r"Data\Filtered_data.json"))
 
-filter_non_basic_data(r"Data\detailed_media_data.json")
