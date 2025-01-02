@@ -104,7 +104,7 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
     Args:
         import_location (str): The location for the .json file.
         filter (list of str): A list for what to whitelist.
-        appending (bool): Whether to append to an existing filtered file instead of overwriting it.
+        appending (bool): Whether to append to an existing filtered file instead of overwriting it. Cant Append if File is empty. 
     Returns:
         str: Location for the new .json file.
     """
@@ -132,11 +132,18 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
     export_location = os.path.join(os.path.dirname(import_location),"Filtered_"+os.path.basename(import_location)) # Adds `Filtered_` to the export file
 
     if appending and os.path.exists(export_location):
-        print(f"Appending to existing file at {export_location}")
-        with open(export_location, "r") as f:
-            existing_data = json.load(f)
-        existing_data.update(filtered_dict)
-        filtered_dict = existing_data
+        print(f"Checking existing file at {export_location}")
+        try:
+            with open(export_location, "r") as f:
+                existing_content = f.read().strip()  # Read and strip whitespace
+                if existing_content:  # Check if file is non-empty
+                    existing_data = json.loads(existing_content)
+                    existing_data.update(filtered_dict)
+                    filtered_dict = existing_data
+                else:
+                    print("Export file is empty. Proceeding with overwrite.")
+        except json.JSONDecodeError:
+            print("Existing file contains invalid JSON. Proceeding with overwrite.")
 
     with open(export_location, "w") as f:
         json.dump(filtered_dict, f, indent=4)
@@ -255,4 +262,3 @@ def startup(key:str) -> None:
         os.remove(Path(r"Data\data.json"))
     if os.path.exists(Path(r"Data\Filtered_data.json")):
         os.remove(Path(r"Data\Filtered_data.json"))
-
