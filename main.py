@@ -1,8 +1,11 @@
-import os,os.path,requests,json,sys,logging
+import os,os.path,requests,json,sys,logging,time
+from datetime import datetime, timedelta
+from urllib.request import urlretrieve
 from pathlib import Path
 from dotenv import load_dotenv 
 from datetime import datetime
 import getmediainfo as gmi
+
 
 { #notes
 ### THE TASK ###
@@ -50,6 +53,8 @@ url_get_movie_genres = "https://api.themoviedb.org/3/genre/movie/list?language=e
 url_get_people_list = "https://api.themoviedb.org/3/person/changes?page=1"
 url_get_movie_details = "https://api.themoviedb.org/3/movie/"
 
+
+
 #TODO: Work on going through the pages for the api search. Use a loop and change the url with it
 def get_data(url: str, export_location: str="Data/data.json", write: bool=True) -> str:
     """
@@ -66,6 +71,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     logging.debug("Starting get_data(%s)" % url)
     #Chacks if we have the data beforehand.
 
+    start_time = time.time()
 
     #API key security
     load_dotenv() 
@@ -95,6 +101,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
         logging.info("returning response text")
 
     logging.info("get_data(%s) done!" % url)
+    print("--- response: %s | get_data() took %s seconds" % (response,time.time()-start_time))
     return response_text
 
 def filter_basic_data(import_location: str="Data/data.json", filter: list=["id","title"], appending: bool=False) -> str:
@@ -145,7 +152,7 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
 
     with open(export_location, "w") as f:
         json.dump(filtered_dict, f, indent=4)
-
+    
 
     return export_location
 
@@ -210,7 +217,7 @@ def filter_non_basic_data(import_location: str=r"Data/detailed_media_data.json",
 
     return 
 
-def set_api_key(key:str) -> bool:
+def set_api_key(key: str) -> bool:
     """
     Saves the API key in a .env file. (MAKE SURE TO ADD .env TO YOUR .gitignore FILE IF YOU HAVE NOT DONE SO ALLREADY)
     
@@ -240,7 +247,7 @@ def set_api_key(key:str) -> bool:
     
     return json.loads(response.text)["success"]
 
-def startup(key:str) -> None:
+def startup(key: str) -> None:
     """
     Gives you the data in a quick and easy way.
 
@@ -281,5 +288,32 @@ def get_all_data(url: str) -> None:
 
     return
 
+def get_daily_ID(info: str) -> None:
+    """
+    Downloads the newest Daily ID export list.
 
-get_all_data(url_get_movies)
+    Args:
+    info (str): The info to find, Available parapmetres: `movie`,`tv_series`,`person`,`collection`,`keyword` and `production_company` 
+    """
+
+    #Checks if today is earlier than 8:00 AM UTC (if it is check yesterdays log)
+    if int(datetime.now().strftime("%H")) > 8:
+        print("Getting Todays daily id's")
+        #urlretrieve("http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + str(datetime.now().strftime("%m_%d_%Y")) + ".json.gz","Daily_ID")
+
+    else:
+        print("Getting Yesyerdays daily id's")
+        date = str(datetime.now().strftime("%m_%d_%Y"))
+        print(date)
+        #print("http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + date + ".json.gz")
+        #urlretrieve("http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + str(datetime.now().strftime("%m_%d_%Y")) + ".json.gz","Daily_ID")
+
+    date = str(datetime.now().strftime("%m_%d_%Y"))
+    yesterday = (datetime.now() - timedelta(days=1)).strftime("%m_%d_%Y")
+    print(date)
+    #info
+    #name = ...
+    #urlretrieve(info,name)
+    #datetime.now().strftime("%m_%d_%Y")
+
+get_daily_ID("test")
