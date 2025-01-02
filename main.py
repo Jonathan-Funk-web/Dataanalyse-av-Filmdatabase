@@ -1,6 +1,7 @@
 import os,os.path,requests,json,sys,logging
 from pathlib import Path
 from dotenv import load_dotenv 
+from datetime import datetime
 import getmediainfo as gmi
 
 { #notes
@@ -114,12 +115,10 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
     except:
         logging.warning("Filter cant be empty")
 
-    print("Filtering %s with whitelist-filter %s" % (import_location,filter))
     import_location = Path(import_location) # Maks the directory path complient with the os.
     filtered_data = []
     data = gmi.load_json(import_location)
 
-    print(str(import_location) + " loaded!")
     for item in data["results"]: # Adds the media to a dict
         filtered_dict = {}  
         for info in filter:
@@ -132,7 +131,6 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
     export_location = os.path.join(os.path.dirname(import_location),"Filtered_"+os.path.basename(import_location)) # Adds `Filtered_` to the export file
 
     if appending and os.path.exists(export_location):
-        print(f"Checking existing file at {export_location}")
         try:
             with open(export_location, "r") as f:
                 existing_content = f.read().strip()  # Read and strip whitespace
@@ -262,3 +260,26 @@ def startup(key:str) -> None:
         os.remove(Path(r"Data\data.json"))
     if os.path.exists(Path(r"Data\Filtered_data.json")):
         os.remove(Path(r"Data\Filtered_data.json"))
+
+def get_all_data(url: str) -> None:
+    """
+    Uses `get_data(url)` and goes through all the pages, it then filters it with `filter_basic_data()`, then finaly runs `get_extra_media_data()`.    
+    Args:
+        url (str): The URL to use with the API.
+    """
+
+    data = get_data(url)
+    total_pages = data["total_pages"]
+
+    for i in range(1,total_pages+1):
+        print("On page nr %s of %s" % (i,total_pages))
+        get_data(url+"&page="+str(i)) #Pagination
+        filter_basic_data(appending=True)
+
+    global last_date_checked 
+    last_date_checked = datetime.now()
+
+    return
+
+
+get_all_data(url_get_movies)
