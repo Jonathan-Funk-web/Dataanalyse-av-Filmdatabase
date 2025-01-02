@@ -44,7 +44,7 @@ logging.basicConfig(format="TIME: %(asctime)s | LINE: %(lineno)s | %(levelname)s
 
 #API request 
 url_auth = "https://api.themoviedb.org/3/authentication"
-url_get_movies = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc"
+url_get_movies = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc"
 url_get_movie_genres = "https://api.themoviedb.org/3/genre/movie/list?language=en"
 url_get_people_list = "https://api.themoviedb.org/3/person/changes?page=1"
 url_get_movie_details = "https://api.themoviedb.org/3/movie/"
@@ -96,7 +96,7 @@ def get_data(url: str, export_location: str="Data/data.json", write: bool=True) 
     logging.info("get_data(%s) done!" % url)
     return response_text
 
-def filter_basic_data(import_location: str="Data/data.json", filter: list=["id","title"]) -> str:
+def filter_basic_data(import_location: str="Data/data.json", filter: list=["id","title"], appending: bool=False) -> str:
     """
     Filters the .json data from import_location, if the .json has a object with a name that is on the whitelist filter it is copied over for the next file. If it is not it is ignored.
     When finished, it exports it to the same directory but with the prefix `filtered_` to its name.
@@ -104,6 +104,7 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
     Args:
         import_location (str): The location for the .json file.
         filter (list of str): A list for what to whitelist.
+        appending (bool): Whether to append to an existing filtered file instead of overwriting it.
     Returns:
         str: Location for the new .json file.
     """
@@ -130,6 +131,13 @@ def filter_basic_data(import_location: str="Data/data.json", filter: list=["id",
 
     export_location = os.path.join(os.path.dirname(import_location),"Filtered_"+os.path.basename(import_location)) # Adds `Filtered_` to the export file
 
+    if appending and os.path.exists(export_location):
+        print(f"Appending to existing file at {export_location}")
+        with open(export_location, "r") as f:
+            existing_data = json.load(f)
+        existing_data.update(filtered_dict)
+        filtered_dict = existing_data
+
     with open(export_location, "w") as f:
         json.dump(filtered_dict, f, indent=4)
 
@@ -154,8 +162,6 @@ def get_extra_media_data(import_location: str,export_location: str = "Data/detai
     with open(Path(export_location), "w") as file:
         json.dump(data, file, indent=4)
     return
-
-
 
 def filter_non_basic_data(import_location: str=r"Data/detailed_media_data.json",export_location: str=r"Data/data.json"):
     """
@@ -198,7 +204,6 @@ def filter_non_basic_data(import_location: str=r"Data/detailed_media_data.json",
 
 
     return 
-
 
 def set_api_key(key:str) -> bool:
     """
