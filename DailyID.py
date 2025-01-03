@@ -1,9 +1,11 @@
 import os
+import sys
 import gzip
 import shutil
 from pathlib import Path
 from urllib.request import urlretrieve
 from datetime import datetime, timedelta
+import requests
 
 
 def get_daily_ID_url(info: str) -> str:
@@ -41,20 +43,28 @@ def download_daily_ID(url: str, filename: str) -> None:
     Downloads the file form the url given.
     Args:
         url (str): Get this from `get_daily_ID_url`.
-        filename (str): The name of the file you are downloading. 
+        filename (str): The name of the file you are downloading.  (without file format)
     """
-    path, headers = urlretrieve(url,filename) 
-    for name, value in headers.items():
-        print(name, value)
 
-    os.replace("todays_list.gz", Path("Data/todays_list.gz"))
+
+    response = requests.get(url)
+
+    if not response.ok:
+        print("request failed")
+        return
+
+    start_path = Path("Data") / filename
+
+    with open(str(start_path) + ".gz", mode="wb") as file:
+        file.write(response.content)
 
     #This unzips the .gz file.
-    with gzip.open(Path("Data/todays_list.gz"), "rb") as f_in:
-        with open(Path("Data/todays_list.json"), "wb") as f_out:
+    with gzip.open(str(start_path) + ".gz", "rb") as f_in:
+        with open(str(start_path) + ".json", "wb") as f_out:
             shutil.copyfileobj(f_in, f_out)
 
-    os.remove(Path(r"Data/todays_list.gz"))
+    os.remove(str(start_path) + ".gz")
+
 
 
     return
