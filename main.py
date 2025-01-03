@@ -288,32 +288,28 @@ def get_all_data(url: str) -> None:
 
     return
 
-def get_daily_ID(info: str) -> None:
+def get_daily_ID_url(info: str) -> str:
     """
     Downloads the newest Daily ID export list.
 
     Args:
-    info (str): The info to find, Available parapmetres: `movie`,`tv_series`,`person`,`collection`,`keyword` and `production_company` 
+        info (str): The info to find, Available parapmetres: `movie`,`tv_series`,`person`,`collection`,`keyword` and `production_company` 
+    returns:
+        str: url for downloading daily ID
     """
+
+    date = str(datetime.now().strftime("%m_%d_%Y"))
+    yesterday = (datetime.now() - timedelta(days=1)).strftime("%m_%d_%Y")
 
     #Checks if today is earlier than 8:00 AM UTC (if it is check yesterdays log)
     if int(datetime.now().strftime("%H")) > 8:
         print("Getting Todays daily id's")
-        #urlretrieve("http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + str(datetime.now().strftime("%m_%d_%Y")) + ".json.gz","Daily_ID")
+        url = "http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + date + ".json.gz"
 
     else:
         print("Getting Yesyerdays daily id's")
-        date = str(datetime.now().strftime("%m_%d_%Y"))
-        print(date)
-        #print("http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + date + ".json.gz")
-        #urlretrieve("http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + str(datetime.now().strftime("%m_%d_%Y")) + ".json.gz","Daily_ID")
+        url = "http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + yesterday + ".json.gz"
 
-    date = str(datetime.now().strftime("%m_%d_%Y"))
-    yesterday = (datetime.now() - timedelta(days=1)).strftime("%m_%d_%Y")
-    print(date)
-    #info
-    #name = ...
-    #urlretrieve(info,name)
-    #datetime.now().strftime("%m_%d_%Y")
+    return url
 
-get_daily_ID("test")
+get_daily_ID_url("movies")
