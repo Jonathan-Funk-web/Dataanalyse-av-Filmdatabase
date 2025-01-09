@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.request import urlretrieve
 from datetime import datetime, timedelta
 import requests
+import json
 
 
 def get_daily_ID_url(info: str,use_yesterday: bool = False) -> str:
@@ -73,7 +74,34 @@ def download_daily_ID(info: str, filename: str) -> None:
 
     os.remove(str(start_path) + ".gz")
 
-
-
     return
 
+def filter_ID_list(import_location: str = Path("Data/movie_id_list.json"), whitelist_filter: list = ["id","original_title"]) -> None:
+    """
+    Filters the ID list with a whitelist filter. Replaces old file.
+        import_location (str): The ID list that will be filtered.
+        whitelist_filter (list of str): Everything that is not in this fillter will be removed from the file.
+    """
+
+    with open(import_location, "r", encoding="utf-8") as handle:
+        json_data = [json.loads(line) for line in handle]
+
+    original_flie_size = os.path.getsize(import_location)
+    temp_list = []
+
+
+    for i in range(len(json_data)):
+        temp_dict = {}
+        if json_data[i]["adult"] or json_data[i]["video"]:
+            print("passing")
+            continue
+        for info in whitelist_filter:
+            temp_dict.update({info:json_data[i][info]})
+        temp_list.append(temp_dict)
+    print(len(temp_list))
+
+
+    with open(import_location, "w") as outfile:
+        json.dump(temp_list, outfile)
+
+    print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location))))
