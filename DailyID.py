@@ -98,7 +98,9 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json"), white
             temp_dict.update({info:json_data[i][info]})
         temp_list.append(temp_dict)
 
-    with open(import_location, "w") as outfile:
-        json.dump(temp_list, outfile)
+    with open(import_location, "w") as file:
+        for record in temp_list:
+            json_line = json.dumps(record)
+            file.write(json_line + "\n")
 
     print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location))))
