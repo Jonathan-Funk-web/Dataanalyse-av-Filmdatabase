@@ -8,12 +8,13 @@ from datetime import datetime, timedelta
 import requests
 
 
-def get_daily_ID_url(info: str) -> str:
+def get_daily_ID_url(info: str,use_yesterday: bool = False) -> str:
     """
     Downloads the newest Daily ID export list, if the time is before 8 am UTC it gets yesterdays url instead.
 
     Args:
         info (str): The info to find, Available parapmetres: `movie`,`tv_series`,`person`,`collection`,`keyword` and `production_company` 
+        use_yesterday (bool): If True: tries to download using yesterdays list.
     returns:
         str: url for downloading daily ID
         str: todays date in MMDDYYYY
@@ -28,7 +29,7 @@ def get_daily_ID_url(info: str) -> str:
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%m_%d_%Y")
 
     #Checks if today is earlier than 8:00 AM UTC (if it is check yesterdays log)
-    if int(datetime.now().strftime("%H")) > 8:
+    if (int(datetime.now().strftime("%H")) > 8) and not use_yesterday:
         print("Getting Todays daily id's")
         url = "http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + today + ".json.gz"
 
@@ -51,6 +52,7 @@ def download_daily_ID(url: str, filename: str) -> None:
 
     if not response.ok:
         print("request failed")
+        print(response)
         return
 
     start_path = Path("Data") / filename
