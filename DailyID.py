@@ -37,23 +37,29 @@ def get_daily_ID_url(info: str,use_yesterday: bool = False) -> str:
         print("Getting Yesyerdays daily id's")
         url = "http://files.tmdb.org/p/exports/" + str(info) + "_ids_" + yesterday + ".json.gz"
 
+    #TODO: Add a way for it to go back one day at a time untuil it finds a valid URL (i.e. add redundency) 
     return url
 
-def download_daily_ID(url: str, filename: str) -> None:
+def download_daily_ID(info: str, filename: str) -> None:
     """
     Downloads the file form the url given.
     Args:
-        url (str): Get this from `get_daily_ID_url`.
+        info (str): The info to find, Available parapmetres: `movie`,`tv_series`,`person`,`collection`,`keyword` and `production_company` 
         filename (str): The name of the file you are downloading.  (without file format)
     """
 
+    url = get_daily_ID_url(info)
 
     response = requests.get(url)
 
     if not response.ok:
         print("request failed")
-        print(response)
-        return
+        url = get_daily_ID_url(info,use_yesterday=True)
+        response = requests.get(url)
+
+    if not os.path.isdir(Path("Data")):
+        print("%s does not exist, making it now" % Path("Data"))
+        os.makedirs(Path("Data"))
 
     start_path = Path("Data") / filename
 
