@@ -98,8 +98,6 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json"), white
         for info in whitelist_filter:
             temp_dict.update({info:json_data[i][info]})
         temp_list.append(temp_dict)
-    print(len(temp_list))
-
 
     with open(import_location, "w") as outfile:
         json.dump(temp_list, outfile)
