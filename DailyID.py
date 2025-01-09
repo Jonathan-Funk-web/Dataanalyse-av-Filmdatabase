@@ -93,7 +93,6 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json"), white
     for i in range(len(json_data)):
         temp_dict = {}
         if json_data[i]["adult"] or json_data[i]["video"]:
-            print("passing")
             continue
         for info in whitelist_filter:
             temp_dict.update({info:json_data[i][info]})
