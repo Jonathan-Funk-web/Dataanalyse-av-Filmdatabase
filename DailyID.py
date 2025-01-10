@@ -98,11 +98,11 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
 
     for i in range(len(json_data)):
         
-        if json_data[i]["adult"]:
+        if json_data[i].get("adult"):
             adult_counter = adult_counter + 1
             continue
 
-        if json_data[i]["video"]:
+        if json_data[i].get("video"):
             video_counter = video_counter + 1
             continue
 
@@ -120,5 +120,4 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
     
     print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location))))
 
-filter_ID_list(r"Data\todays_list.gz.json")
-
+filter_ID_list("Data\TV_ID.json")
