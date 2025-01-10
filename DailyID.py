@@ -84,7 +84,7 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
     Args:
         import_location (str): The ID list that will be filtered.
     Returns:
-        list: list of just the ID 
+        list: list of just the ID and the amount of `adult` and `video` removed.
     """
     #TODO: add the `video` and `adult` list to variables so this is more generalized.
     with open(import_location, "r", encoding="utf-8") as handle:
@@ -106,7 +106,7 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
             video_counter = video_counter + 1
             continue
 
-        print("Processing ID %s out of %s" % (i,len(json_data)))
+        print("Processing ID %s out of %s" % (i+1,len(json_data)))
         id_list.append(json_data[i]["id"])
         
 
@@ -120,5 +120,5 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
     
     print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location))))
 
-filter_ID_list(r"Data\todays_list.gz copy.json")
+filter_ID_list(r"Data\todays_list.gz.json")
 
