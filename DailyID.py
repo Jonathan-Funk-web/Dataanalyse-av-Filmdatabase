@@ -106,8 +106,10 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
             video_counter = video_counter + 1
             continue
 
+        print("Processing ID %s out of %s" % (i,len(json_data)))
         id_list.append(json_data[i]["id"])
         
+
     temp_dict.update({"id_list":id_list})
     temp_dict.update({"video_counter":video_counter})
     temp_dict.update({"adult_counter":adult_counter})
@@ -115,7 +117,7 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
     with open(import_location, "w", encoding="utf-8") as file:
         file.write(json.dumps(temp_dict))
 
-
+    
     print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location))))
 
 filter_ID_list(r"Data\todays_list.gz copy.json")
