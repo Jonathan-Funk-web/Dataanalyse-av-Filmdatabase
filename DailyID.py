@@ -118,6 +118,6 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
         file.write(json.dumps(temp_dict))
 
     
-    print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location))))
+    print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller i.e. %s%% smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location)),(100*(original_flie_size-os.path.getsize(import_location)))/original_flie_size))
 
 filter_ID_list("Data\TV_ID.json")
