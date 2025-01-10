@@ -41,13 +41,15 @@ def get_daily_ID_url(info: str,use_yesterday: bool = False) -> str:
     #TODO: Add a way for it to go back one day at a time untuil it finds a valid URL (i.e. add redundency) 
     return url
 
-def download_daily_ID(info: str, filename: str) -> None:
+def download_daily_ID(info: str="movie", filename: str="ID_list") -> None:
     """
     Downloads the file form the url given.
     Args:
         info (str): The info to find, Available parapmetres: `movie`,`tv_series`,`person`,`collection`,`keyword` and `production_company` 
         filename (str): The name of the file you are downloading.  (without file format)
     """
+
+    print(info)
 
     url = get_daily_ID_url(info)
 
@@ -76,31 +78,45 @@ def download_daily_ID(info: str, filename: str) -> None:
 
     return
 
-def filter_ID_list(import_location: str = Path("Data/movie_id_list.json"), whitelist_filter: list = ["id","original_title"]) -> None:
+def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> list:
     """
-    Filters the ID list with a whitelist filter. Replaces old file.
+    Filters the ID list for just the ID. Also filters out media tagged as either `adult` or `video` WARNING: Replaces old file.
+    Args:
         import_location (str): The ID list that will be filtered.
-        whitelist_filter (list of str): Everything that is not in this fillter will be removed from the file.
+    Returns:
+        list: list of just the ID 
     """
-
+    #TODO: add the `video` and `adult` list to variables so this is more generalized.
     with open(import_location, "r", encoding="utf-8") as handle:
         json_data = [json.loads(line) for line in handle]
 
     original_flie_size = os.path.getsize(import_location)
-    temp_list = []
-
+    id_list = []
+    temp_dict = {}
+    adult_counter = 0 #Increments each time a media is tagged "Adult" (this should be 0 due to the list im downloading, but just implementing it for fun)
+    video_counter = 0 #Increments each time a media is tagged "Video"
 
     for i in range(len(json_data)):
-        temp_dict = {}
-        if json_data[i]["adult"] or json_data[i]["video"]:
+        
+        if json_data[i]["adult"]:
+            adult_counter = adult_counter + 1
             continue
-        for info in whitelist_filter:
-            temp_dict.update({info:json_data[i][info]})
-        temp_list.append(temp_dict)
+
+        if json_data[i]["video"]:
+            video_counter = video_counter + 1
+            continue
+
+        id_list.append(json_data[i]["id"])
+        
+    temp_dict.update({"id_list":id_list})
+    temp_dict.update({"video_counter":video_counter})
+    temp_dict.update({"adult_counter":adult_counter})
 
     with open(import_location, "w", encoding="utf-8") as file:
-        for record in temp_list:
-            json_line = json.dumps(record)
-            file.write(json_line + "\n")
+        file.write(json.dumps(temp_dict))
+
 
     print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location))))
+
+filter_ID_list(r"Data\todays_list.gz copy.json")
+
