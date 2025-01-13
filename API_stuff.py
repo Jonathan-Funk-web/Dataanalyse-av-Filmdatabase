@@ -1,7 +1,7 @@
 import json, os, logging, requests
 from pathlib import Path
 from dotenv import load_dotenv
-
+from DailyID import progressBar
 
 url_auth = "https://api.themoviedb.org/3/authentication"
 url_get_movies = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc"
@@ -20,7 +20,6 @@ def get_data(url: str) -> str:
     
     Returns:
         str:  Data gathered.
-        str:  Response.
     """
 
     #API key security
@@ -41,7 +40,7 @@ def get_data(url: str) -> str:
         return
     
 
-    return response_text, response
+    return response_text
 
 def get_movie_info(id:int) -> dict:
     """
@@ -51,7 +50,7 @@ def get_movie_info(id:int) -> dict:
     returns:
         dict: Data gathered.
     """
-    return get_data(url = "https://api.themoviedb.org/3/movie/"+str(id))[0]
+    return get_data(url = "https://api.themoviedb.org/3/movie/"+str(id))
 
 def get_movie_credits(id:int) -> dict:
     """
@@ -61,5 +60,27 @@ def get_movie_credits(id:int) -> dict:
     returns:
         dict: Data gathered.
     """
-    return get_data(url = "https://api.themoviedb.org/3/movie/"+ str(id) + "/credits?language=en-US")[0]
-print(get_movie_credits(2))
+    return get_data(url = "https://api.themoviedb.org/3/movie/"+ str(id) + "/credits?language=en-US")
+
+def get_directors(id_list_location:str = r"Data\people_ID_list.json"):
+    with open(Path(id_list_location), "r") as file:
+        json_data = json.load(file)
+    
+    progress = 0
+    
+    # for person_id in json_data["id_list"]:
+    #     progressBar(progress, len(json_data["id_list"]))
+
+    #     person_info = get_data("https://api.themoviedb.org/3/person/" + str(person_id)[0])
+    #     print(type(person_info))
+        
+    #     progress = progress + 1
+
+
+    person_info = get_data("https://api.themoviedb.org/3/person/" + str(93364))
+    print(person_info)
+    
+    
+    # "Directing"
+
+get_directors()
