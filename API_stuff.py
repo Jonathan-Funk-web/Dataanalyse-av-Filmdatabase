@@ -19,7 +19,8 @@ def get_data(url: str) -> str:
         write (bool): If True, prints the data gathered to the file.
     
     Returns:
-        str: Data gathered.
+        str:  Data gathered.
+        str:  Response.
     """
 
     #API key security
@@ -40,4 +41,16 @@ def get_data(url: str) -> str:
         return
     
 
-    return response_text
+    return response_text, response
+
+def get_movie_info(id:int) -> dict:
+    """
+    Gets the general movie info from the given movie id.
+    args:
+        id (int): TMDB id for the movie.
+    returns:
+        dict: Data gathered.
+    """
+    return get_data(url = "https://api.themoviedb.org/3/movie/"+str(id))[0]
+
+
