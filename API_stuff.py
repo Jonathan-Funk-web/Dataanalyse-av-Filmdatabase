@@ -53,4 +53,13 @@ def get_movie_info(id:int) -> dict:
     """
     return get_data(url = "https://api.themoviedb.org/3/movie/"+str(id))[0]
 
-
+def get_movie_credits(id:int) -> dict:
+    """
+    Gets the credits for movie the given movie id.
+    args:
+        id (int): TMDB id for the movie.
+    returns:
+        dict: Data gathered.
+    """
+    return get_data(url = "https://api.themoviedb.org/3/movie/"+ str(id) + "/credits?language=en-US")[0]
+print(get_movie_credits(2))
