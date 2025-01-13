@@ -34,7 +34,11 @@ So while this project is very much me figuring out how to do stuff like this, I 
 
 
 ## Usage
-run the function `startup`.
+Run the function `startup`.
+**To get the Daily ID files:**
+Use these commands:
+`DailyID.download_daily_ID("movie","todays_list_movies")`
+`DailyID.filter_ID_list(r"Data/todays_list_movies.json")`
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
