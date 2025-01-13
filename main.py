@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 import getmediainfo as gmi
 import DailyID
-
+import time
 
 { #notes
 ### THE TASK ###
@@ -289,5 +289,24 @@ def get_all_data(url: str) -> None:
 
     return
 
+def progressBar(count_value, total, suffix=''):
+    bar_length = 100
+    filled_up_Length = int(round(bar_length* count_value / float(total)))
+    percentage = round(100.0 * count_value/float(total),1)
+    bar = '=' * filled_up_Length + '-' * (bar_length - filled_up_Length)
+    sys.stdout.write('[%s] %s%s ...%s\r' %(bar, percentage, '%', suffix))
+    sys.stdout.flush()
+    #This code is Contributed by PL VISHNUPPRIYAN from url: https://www.geeksforgeeks.org/progress-bars-in-python/
 
-DailyID.download_daily_ID(DailyID.get_daily_ID_url("movie"),"todays_list.gz")
+def get_data_from_ID_list(import_location: str = Path("Data/todays_list_movies.json")) -> None:
+    with open(Path(r"Data\todays_list_movies.json"), "r") as file:
+        json_data = json.load(file)
+    print(json_data)
+    return
+
+# get_data_from_ID_list()
+
+
+
+# DailyID.download_daily_ID("movie","todays_list_movies")
+# DailyID.filter_ID_list(r"Data/todays_list_movies.json")

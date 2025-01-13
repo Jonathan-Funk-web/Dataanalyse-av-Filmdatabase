@@ -7,7 +7,7 @@ from urllib.request import urlretrieve
 from datetime import datetime, timedelta
 import requests
 import json
-
+import time
 
 def get_daily_ID_url(info: str,use_yesterday: bool = False) -> str:
     """
@@ -106,7 +106,7 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
             video_counter = video_counter + 1
             continue
 
-        print("Processing ID %s out of %s" % (i+1,len(json_data)))
+        progressBar(i,len(json_data))
         id_list.append(json_data[i]["id"])
         
 
@@ -120,4 +120,20 @@ def filter_ID_list(import_location: str = Path("Data/movie_id_list.json")) -> li
     
     print("Old file size: %s bytes\nNew file size: %s bytes\nFilesize is %s bytes smaller i.e. %s%% smaller." % (original_flie_size,os.path.getsize(import_location),(original_flie_size-os.path.getsize(import_location)),(100*(original_flie_size-os.path.getsize(import_location)))/original_flie_size))
 
-filter_ID_list("Data\TV_ID.json")
+def progressBar(count_value, total, suffix=''):
+    bar_length = 100
+    filled_up_Length = int(round(bar_length* count_value / float(total)))
+    percentage = round(100.0 * count_value/float(total),1)
+    bar = '=' * filled_up_Length + '-' * (bar_length - filled_up_Length)
+    sys.stdout.write('[%s] %s%s ...%s\r' %(bar, percentage, '%', suffix))
+    sys.stdout.flush()
+    #This code is Contributed by PL VISHNUPPRIYAN from url: https://www.geeksforgeeks.org/progress-bars-in-python/
+
+
+# def check_for_new_IDs() -> bool:
+#     with open(Path(r"Data\todays_list_movies.json"), "r") as file:
+#         json_data = json.load(file)
+#     previous_full_id_list = json_data["id_list"]
+#     return
+
+# check_for_new_IDs()
