@@ -20,7 +20,7 @@ This is also my first proper project, so there will most likely be a few mistake
 ```bash
  git clone https://github.com/Jonathan-Funk-web/Dataanalyse-av-Filmdatabase/
 ```
-2. The program uses data from [this Kaggle dataset](https://www.kaggle.com/datasets/alanvourch/tmdb-movies-daily-updates), download it andput it in to the `Data` folder
+2. The program uses data from [this Kaggle dataset](https://www.kaggle.com/datasets/alanvourch/tmdb-movies-daily-updates), download it andput it in to the folder where the other files are.
 
 
 
