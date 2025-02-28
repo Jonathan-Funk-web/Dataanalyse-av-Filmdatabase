@@ -10,17 +10,11 @@ This is also my first proper project, so there will most likely be a few mistake
 ## Table of Contents
 - [Data analasys of The Movie Database](#data-analasys-of-the-movie-database)
   - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Database info](#database-info)
-  - [Usage](#usage)
   - [License](#license)
 
-## Installation
-1. Clone the repository:
-```bash
- git clone https://github.com/Jonathan-Funk-web/Dataanalyse-av-Filmdatabase/
-```
-2. The program uses data from [this Kaggle dataset](https://www.kaggle.com/datasets/alanvourch/tmdb-movies-daily-updates), download it andput it in to the folder where the other files are.
+
+
+ The program uses data from [this Kaggle dataset](https://www.kaggle.com/datasets/alanvourch/tmdb-movies-daily-updates).
 
 
 
